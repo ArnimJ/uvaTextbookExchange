@@ -7,6 +7,7 @@
       "title": "Probability and Stochastic Processes",
       "isbn": 9781118324561,
       "author": "Roy D. Yates",
+      "publicationDate": "2014-01-01",
       "publisher": "Wiley"
     }
   },
@@ -15,7 +16,7 @@
     "pk": 2,
     "fields": {
       "postTitle": "Probability Textbook For sale",
-      "Textbook": 1,
+      "textbook": 1,
       "condition" : "Used",
       "price" : 45.00,
       "category": "Mathematics"
