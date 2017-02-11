@@ -1,0 +1,5 @@
+*.pyc
+.idea/workspace.xml
+media/
+uvaTextbookExchange/settings.py
+marketplace/migrations
