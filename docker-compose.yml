@@ -7,6 +7,5 @@ models:
     ports:
       - "8001:8000"
 
-    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./uvaTextBookExchange/wsgi.py"
+    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./uvaTextbookExchange/wsgi.py"
 #    command: bash -c "python manage.py loaddata db.json"
-#    command: bash -c "pip install djangorestframework"

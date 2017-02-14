@@ -15,29 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from marketplace.models import Textbook
-from marketplace.models import TextbookPost
+from marketplace.models import Textbook, TextbookPost
+from marketplace import views
 
-from rest_framework import routers, serializers, viewsets
-
-# Serializers define the API representation.
-class TextbookSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Textbook
-        fields = ('title', 'isbn', 'author', 'publicationDate', 'publisher')
-
-# ViewSets define the view behavior.
-class TextbookViewSet(viewsets.ModelViewSet):
-    queryset = Textbook.objects.all()
-    serializer_class = TextbookSerializer
-
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'textbook', TextbookViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include(router.urls)),
-    url(r'^/api/v1/textbooks/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^$', views.index, name='main'),
+
+    #API urls
+    url(r'^api/textbooks/', views.getTextbook),
 ]

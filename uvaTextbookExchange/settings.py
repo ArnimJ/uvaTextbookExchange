@@ -37,7 +37,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 'isbn_field',
     'marketplace',
-    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
