@@ -3,8 +3,8 @@ models:
     external_links:
       -  mysql:db
     volumes:
-      - /:/app
+      - ./:/app
     ports:
       - "8001:8000"
-    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes uvaTextBookExchange/uvaTextBookExchange/wsgi.py"
+    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./uvaTextBookExchange/wsgi.py"
     #command: bash -c "python manage.py loaddata db.json"
