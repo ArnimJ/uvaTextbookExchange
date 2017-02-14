@@ -1,7 +1,8 @@
-<h1>This stuff isn't finished</h1>
+<h1>This stuff is pretty finished</h1>
 </br>
-<form action="/Posttextbooks/" method="POST">
-	<input type="text" name="title">
+<form action="/postTextbook/" method="POST">
+	{% csrf_token %}
+    {{ form.as_ul }}
 	<input type="submit" Value="Save">
 </form>
 </br>

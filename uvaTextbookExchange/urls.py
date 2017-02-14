@@ -25,4 +25,5 @@ urlpatterns = [
 
     #API urls
     url(r'^textbooks/', views.getTextbook),
+    url(r'^postTextbook/', views.postTextbook),
 ]
