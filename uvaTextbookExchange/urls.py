@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^$', views.index, name='main'),
 
     #API urls
-    url(r'^api/textbooks/', views.getTextbook),
+    url(r'^textbooks/', views.getTextbook),
 ]

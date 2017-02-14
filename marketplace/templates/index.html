@@ -1,1 +1,25 @@
-<h1>This stuff is workin</h1>
+<h1>This stuff isn't finished</h1>
+</br>
+<form action="/Posttextbooks/" method="POST">
+	<input type="text" name="title">
+	<input type="submit" Value="Save">
+</form>
+</br>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>author</th>
+        <th>Publication Date</th>
+        <th>Publisher</th>
+    </tr>
+    {% for item in query_results %}
+    <tr> 
+        <td>{{ item.title }}</td>
+        <td>{{ item.isbn }}</td>
+        <td>{{ item.author }}</td>
+        <td>{{ item.publicationDate }}</td>
+        <td>{{ item.publisher }}</td>
+    </tr>
+    {% endfor %}
+</table>
