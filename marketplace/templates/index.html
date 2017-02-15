@@ -13,6 +13,7 @@
         <th>author</th>
         <th>Publication Date</th>
         <th>Publisher</th>
+        <th>ID</th>
     </tr>
     {% for item in query_results %}
     <tr> 
@@ -21,6 +22,7 @@
         <td>{{ item.author }}</td>
         <td>{{ item.publicationDate }}</td>
         <td>{{ item.publisher }}</td>
+        <td>{{ item.id }}</td>
     </tr>
     {% endfor %}
 </table>

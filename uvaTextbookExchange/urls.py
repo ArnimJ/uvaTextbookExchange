@@ -24,6 +24,9 @@ urlpatterns = [
     url(r'^$', views.index, name='main'),
 
     #API urls
-    url(r'^textbooks/', views.getTextbook),
-    url(r'^postTextbook/', views.postTextbook),
+    url(r'^v1/api/textbooks/$', views.getTextbooks),
+    url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm),
+    url(r'^v1/api/textbooklistings/', views.getTextbookPost),
+    url(r'^v1/api/textbooks/delete/$', views.deleteTextbook),
+    url(r'^v1/api/textbooks/create/$', views.createTextbook),
 ]

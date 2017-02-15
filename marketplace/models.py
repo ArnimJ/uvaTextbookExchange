@@ -4,10 +4,10 @@ from django.db import models
 class Textbook(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=70, blank=False)
-    isbn = models.BigIntegerField(blank=False) 	
+    isbn = models.BigIntegerField(blank=False)
     author = models.CharField(max_length=70)
-    publicationDate = models.DateField(auto_now=False, auto_now_add=False)
-    publisher = models.CharField(max_length=70)
+    publicationDate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    publisher = models.CharField(max_length=70, blank=True, null=True)
 
 
 ##a post for selling a textbook
