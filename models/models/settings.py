@@ -59,7 +59,7 @@ REST_FRAMEWORK = {
 }
 
 
-ROOT_URLCONF = 'uvaTextbookExchange.urls'
+ROOT_URLCONF = 'models.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'uvaTextbookExchange.wsgi.application'
+WSGI_APPLICATION = 'models.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

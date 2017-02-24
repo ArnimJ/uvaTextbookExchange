@@ -7,4 +7,4 @@ models:
     ports:
       - "8001:8000"
     command: bash -c "python manage.py makemigrations marketplace && python manage.py migrate && python manage.py loaddata db.json &&
-        mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./uvaTextbookExchange/wsgi.py"
+        mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./models/wsgi.py"
