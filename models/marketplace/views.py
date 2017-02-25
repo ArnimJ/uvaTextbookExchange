@@ -76,27 +76,28 @@ def createTextbook(request):
 #for updating an exisiting textbook
 def updateTextbook(request):
     if request.method == 'POST':
-        id = request.Post.get('id', False)
-        newTitle = request.Post.get('title', False)
-        newIsbn = request.Post.get('isbn', False)
-        newAuthor = request.Post.get('author', False)
-        newPublicationsDate = request.Post.get('publicationDate', False)
-        newPublisher = request.Post.get('publisher', False)
+        id = request.POST.get('id', False)
+        newTitle = request.POST.get('title', False)
+        newIsbn = request.POST.get('isbn', False)
+        newAuthor = request.POST.get('author', False)
+        newPublicationsDate = request.POST.get('publicationDate', False)
+        newPublisher = request.POST.get('publisher', False)
         if id:
             try:
                 object = Textbook.objects.get(id=id)
                 if newTitle:
-                    object.update(title = newTitle)
+                    object.title = newTitle
                 if newIsbn:
                     if type(newIsbn) is int:
-                        object.update(isbn=newIsbn)
+                        object.isbn=newIsbn
                 if newAuthor:
-                    object.update(author = newAuthor)
+                    object.author = newAuthor
                 if newPublicationsDate:
                     date = parse_date(newPublicationsDate)
-                    object.update(newPublicationsDate = date)
+                    object.newPublicationsDate = date
                 if newPublisher:
-                    object.update(publisher = newPublisher)
+                    object.publisher = newPublisher
+                object.save()
                 returnObject = model_to_dict(object)
                 return JsonResponse({'results': returnObject})
             except ObjectDoesNotExist:
