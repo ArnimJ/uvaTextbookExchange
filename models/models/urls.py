@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from marketplace.models import Textbook, TextbookPost
-from marketplace import views
+from ..marketplace.models import Textbook, TextbookPost
+from ..marketplace import views
 
 
 urlpatterns = [
@@ -24,9 +24,10 @@ urlpatterns = [
     url(r'^$', views.index, name='main'),
 
     #API urls
-    url(r'^v1/api/textbooks/$', views.getTextbooks),
-    url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm),
-    url(r'^v1/api/textbooklistings/', views.getTextbookPost),
-    url(r'^v1/api/textbooks/delete/$', views.deleteTextbook),
-    url(r'^v1/api/textbooks/create/$', views.createTextbook),
+    url(r'^v1/api/textbooks/$', views.getTextbooks, name="allTextbooks"),
+    url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm, name="postTextbook"),
+    url(r'^v1/api/textbooklistings/', views.getTextbookPost,  name="getTextbooks"),
+    url(r'^v1/api/textbooks/delete/$', views.deleteTextbook, name="deleteBook"),
+    url(r'^v1/api/textbooks/create/$', views.createTextbook, name="createTextbook"),
+    url(r'^v1/api/textbooks/updateTextbook/$', views.updateTextbook, name="updateTextbook"),
 ]

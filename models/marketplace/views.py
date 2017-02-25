@@ -1,12 +1,13 @@
 from django.shortcuts import render
-from marketplace.models import Textbook, TextbookPost
+from .models import Textbook, TextbookPost
 from django.views.generic import TemplateView
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-
+from django.utils.dateparse import parse_date
+from django.forms.models import model_to_dict
 
 class TextbookForm(forms.Form):
     title = forms.CharField(label='Title', max_length = 100)
@@ -69,7 +70,40 @@ def createTextbook(request):
             Textbook.objects.create(title=request.POST.get('title'), isbn=request.POST.get('isbn'), author=request.POST.get('author'), publicationDate=request.POST.get('pubdate'), publisher=request.POST.get('publisher'))
             return JsonResponse({'results':'Success'})
         except IntegrityError:
-            return JsonResponse({'results':'You need both the title and author to create an entry'})
+            return JsonResponse({'results':'You need both the title and author to create an entry or your isbn field might be incorrect'})
+
+
+#for updating an exisiting textbook
+def updateTextbook(request):
+    if request.method == 'POST':
+        id = request.Post.get('id', False)
+        newTitle = request.Post.get('title', False)
+        newIsbn = request.Post.get('isbn', False)
+        newAuthor = request.Post.get('author', False)
+        newPublicationsDate = request.Post.get('publicationDate', False)
+        newPublisher = request.Post.get('publisher', False)
+        if id:
+            try:
+                object = Textbook.objects.get(id=id)
+                if newTitle:
+                    object.update(title = newTitle)
+                if newIsbn:
+                    if type(newIsbn) is int:
+                        object.update(isbn=newIsbn)
+                if newAuthor:
+                    object.update(author = newAuthor)
+                if newPublicationsDate:
+                    date = parse_date(newPublicationsDate)
+                    object.update(newPublicationsDate = date)
+                if newPublisher:
+                    object.update(publisher = newPublisher)
+                returnObject = model_to_dict(object)
+                return JsonResponse({'results': returnObject})
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No textbook found"})
+        else:
+            return JsonResponse({'results': "No ID specified"})
+    else: return JsonResponse({'results': "This is a POST method"})
 
 
 

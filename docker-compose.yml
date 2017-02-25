@@ -21,7 +21,7 @@ exp:
    command: "mod_wsgi-express start-server --working-directory . --reload-on-changes ./exp/wsgi.py"
 
 web:
-  image: tp33/django
+   image: tp33/django
    links:
       - exp:exp-api
    ports:
