@@ -39,6 +39,7 @@
     "model": "marketplace.TextbookPost",
     "pk": 4,
     "fields": {
+      "id" : 1,
       "postTitle": "Probability Textbook For sale",
       "textbook": 1,
       "condition" : "Used",

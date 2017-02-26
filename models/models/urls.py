@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^v1/api/textbooks/delete/$', views.deleteTextbook, name="deleteBook"), #delete
     url(r'^v1/api/textbooks/create/$', views.createTextbook, name="createTextbook"), #create
     url(r'^v1/api/textbooks/updateTextbook/$', views.updateTextbook, name="updateTextbook"), #update
-    url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm, name="postTextbook"),
-    url(r'^v1/api/textbooklistings/', views.getTextbookPost, name="getTextbooks"),
+    url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm, name="postTextbook"), #create textbook post
+    url(r'^v1/api/updateTextbookPost/$', views.updateTextbook, name="updatePost"), #update textbook post
+    url(r'^v1/api/textbooklistings/', views.getTextbookPost, name="getTextbookPosts"), #read textbook posts
 ]

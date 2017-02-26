@@ -8,7 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
-
+from decimal import *
+import json
 class TextbookForm(forms.Form):
     title = forms.CharField(label='Title', max_length = 100)
     isbn = forms.IntegerField(label='ISBN')
@@ -31,10 +32,13 @@ def getTextbooks(request):
     if request.method == 'GET':
         id = request.GET.get('id', False)
         if id:
-            results = Textbook.objects.get(id=id)
-            results = forms.models.model_to_dict(results)
+            try:
+                results = Textbook.objects.get(id=id)
+                results = forms.models.model_to_dict(results)
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No textbook found"})
         else:
-            results = list(Textbook.objects.values_list())
+            results = list(Textbook.objects.values())
         return JsonResponse({'results': results})
     else: return JsonResponse({'results': "this is a GET method"})
 
@@ -67,6 +71,12 @@ def postTextbookByForm(request):
 def createTextbook(request):
     if request.method == 'POST':
         try:
+            title1 = request.POST.get('title')
+            isbn1 = request.POST.get('isbn')
+            author1 = request.POST.get('author')
+            publicationDate1 = request.POST.get('pubdate')
+            publisher1 = request.POST.get('publisher')
+
             Textbook.objects.create(title=request.POST.get('title'), isbn=request.POST.get('isbn'), author=request.POST.get('author'), publicationDate=request.POST.get('pubdate'), publisher=request.POST.get('publisher'))
             return JsonResponse({'results':'Success'})
         except IntegrityError:
@@ -105,6 +115,41 @@ def updateTextbook(request):
         else:
             return JsonResponse({'results': "No ID specified"})
     else: return JsonResponse({'results': "This is a POST method"})
+
+
+#update an existing textbookPost
+def updateTextbook(request):
+    if request.method == 'POST':
+        id = request.POST.get('id', False)
+        newPostTitle = request.POST.get('postTitle', False)
+        newCondition = request.POST.get('condition', False)
+        newPrice = request.POST.get('price', False)
+        newCatagory = request.POST.get('category', False)
+        newSold = request.POST.get('sold', False)
+        if id:
+            try:
+                object = TextbookPost.objects.get(id=id)
+                if newPostTitle:
+                    object.postTitle = newPostTitle
+                if newCondition:
+                    object.condition = newCondition
+                if newPrice:
+                    if type(newPrice) is Decimal:
+                        object.price = newPrice
+                if newCatagory:
+                    object.catagory = newCatagory
+                if newSold:
+                    if newSold == "True" or newSold == "true"  or newSold == "False" or newSold == "false":
+                        object.sold = newSold
+                object.save()
+                returnObject = model_to_dict(object)
+                return JsonResponse({'results': returnObject})
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No textbook found"})
+        else:
+            return JsonResponse({'results': "No ID specified"})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
 
 
 
