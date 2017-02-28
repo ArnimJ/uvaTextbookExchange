@@ -45,7 +45,7 @@ def getTextbooks(request):
         else:
             results = list(Textbook.objects.values())
         return JsonResponse({'results': results})
-    else: return JsonResponse({'results': "this is a GET method"})
+    else: return JsonResponse({'results': "this is a GET method, you gave " + request.method})
 
 #Delete the textbook as specified by id
 def deleteTextbook(request):
