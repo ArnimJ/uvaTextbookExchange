@@ -8,8 +8,7 @@ from django.template import loader
 
 def index(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
-    popular = urllib.request.urlopen(req).read().decode('utf-8')
-    popular = json.loads(popular)
+    popular = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     req = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recent = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
