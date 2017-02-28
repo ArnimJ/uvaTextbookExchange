@@ -19,6 +19,9 @@ class TextbookPost(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     category = models.CharField(max_length=70)
     sold = models.BooleanField(default=False)
+    viewCount = models.IntegerField(default=0)
+    postDate = models.DateField(auto_now=False, auto_now_add=True, blank=True, null=True)
+
 
 # #each post will have one catagory.
 # class Category(models.Model):
