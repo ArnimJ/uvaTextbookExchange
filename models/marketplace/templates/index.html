@@ -1,6 +1,6 @@
 <h1>This stuff is pretty finished</h1>
 </br>
-<form action="/postTextbook/" method="POST">
+<form action="/v1/api/postTextbookByForm/" method="POST">
 	{% csrf_token %}
     {{ form.as_ul }}
 	<input type="submit" Value="Save">

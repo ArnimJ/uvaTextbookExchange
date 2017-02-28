@@ -31,12 +31,17 @@ def index(request):
 def getTextbooks(request):
     if request.method == 'GET':
         id = request.GET.get('id', False)
+        filter = request.GET.get('filter', False)
+        results = Textbook.objects
         if id:
             try:
-                results = Textbook.objects.get(id=id)
+                results = results.get(id=id)
                 results = forms.models.model_to_dict(results)
+                return JsonResponse({'results': results})
             except ObjectDoesNotExist:
                 return JsonResponse({'results': "No textbook found"})
+        elif filter:
+            results = results.filter(filter)
         else:
             results = list(Textbook.objects.values())
         return JsonResponse({'results': results})
@@ -158,12 +163,20 @@ def getTextbookPost(request):
     results = TextbookPost.objects.values_list()
     return JsonResponse({'results': list(results)})
 
-
+#we want to avoid model-level apis this specific in order to reduce clutter on the model
+#level. The solution is basically make our get apis advanced enough that enough filtering
+#and such parameters can be passed through that we can accomplish this through a more basic
+#getPost method
 def getPopularPosts(request):
     if request.method == 'GET':
-        pop = TextbookPost.objects.order_by('viewCount')[:4].values()
+        pop = TextbookPost.objects.filter(sold=False).order_by('-viewCount')[:4].values()
         return JsonResponse({'results': list(pop)})
     else:
         return JsonResponse({'results': "This is a GET method"})
 
-#haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
+def getRecentPosts(request):
+    if request.method == 'GET':
+        rec = TextbookPost.objects.filter(sold=False).order_by('-postDate')[:4].values()
+        return JsonResponse({'results': list(rec)})
+    else:
+        return JsonResponse({'results': "This is a GET method"})

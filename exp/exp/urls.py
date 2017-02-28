@@ -18,7 +18,10 @@ from django.contrib import admin
 from middleman import views
 
 urlpatterns = [
-    url(r'^gi$', views.index, name='main'),
+    url(r'^$', views.index, name='main'),
+    url(r'^v1/api/textbooks/$', views.getTextbooks, name='textbooks'),
+    url(r'^v1/api/recentListings/$', views.getRecentPosts, name='recent'),
+    url(r'^v1/api/popularListings/$', views.getRecentPosts, name='popular'),
     url(r'^admin/', include(admin.site.urls)),
 
 ]
