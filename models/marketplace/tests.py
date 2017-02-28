@@ -16,11 +16,11 @@ import json
 import codecs
 
 # Create your tests here.
-class TextbookTestCase(TestCase):
+class GetTextbookTestCases(TestCase):
+
     fixtures = ["db.json"]
     # setUp method is called before each test in this class
     def setUp(self):
-        #Textbook.objects.create(id=1, title = "testing", isbn = "1234567898761")
         pass
 
     def test_success_response(self):
@@ -48,7 +48,7 @@ class TextbookTestCase(TestCase):
         value = response_dict['results']
         self.assertEquals(value['id'],1)
 
-    def test_Post(self): #make sure only get methods work
+    def test_Post(self): #make sure only 'get' methods work
         response = self.client.post(reverse('allTextbooks'))
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
@@ -61,6 +61,146 @@ class TextbookTestCase(TestCase):
         self.assertEquals(value, "No textbook found")
 
     # tearDown method is called after each test
+    def tearDown(self):
+        pass  # nothing to tear down
+
+
+class DeleteTextbookTestCases (TestCase):
+    fixtures = ["db.json"]
+
+    def setUp(self):
+        pass
+
+    def test_success_response(self): #same as above
+        response = self.client.post(reverse('deleteBook'), {'id': 1})
+        self.assertContains(response, 'Success')
+
+    def test_no_ID_Given(self): #no id given test case
+        response = self.client.post(reverse('deleteBook'))
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "No ID specified")
+
+    def test_id_Given(self): #valid id given test case
+        response = self.client.post(reverse('deleteBook'), {'id': 1})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'Success')
+
+    def test_Incorrect_Id(self):  # if invalid id is passed, should a message
+        response = self.client.post(reverse('deleteBook'), {'id': 1000})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'No textbook found')
+
+    def test_Get(self): #should check for get methods
+        response = self.client.get(reverse('deleteBook'))
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "This is a POST method")
+
+    #tearDown method is called after each test
+    def tearDown(self):
+        pass  # nothing to tear down
+
+class CreateTextbookTestCases(TestCase):
+    fixtures = ["db.json"]
+
+    def setUp(self):
+        pass
+
+    def test_success_response(self): #same as above
+        response = self.client.post(reverse('createTextbook'), {'title': 'test' , 'isbn': 123456789013, 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'Success')
+
+    def test_Creation(self): #if all parameters are given, test if response is success
+        response = self.client.post(reverse('createTextbook'), {'title': 'test' , 'isbn': 123456789013, 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'Success')
+
+    def test_No_author_given(self): #test case when author is not given
+        response = self.client.post(reverse('createTextbook'), {'title': 'test' , 'isbn': 123456789013})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'You need a author')
+
+    def test_No_Title_Given(self): #test case when title is not given
+        response = self.client.post(reverse('createTextbook'), {'isbn': 123456789013, 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'You need a title')
+
+    def test_No_Isbn_Given(self): #test case when isbn is not given
+        response = self.client.post(reverse('createTextbook'), {'title': 'test' , 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'You need a isbn')
+
+    def test_Incorrect_type(self): #test for when user inputs non numeral type into a isbn field
+        response = self.client.post(reverse('createTextbook'), {'title': 'testing', 'isbn': 'jack', 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'you tried to put a string for a isbn')
+
+    def test_Get(self): #should check for get methods
+        response = self.client.get(reverse('createTextbook'), {'title': 'test' , 'isbn': 123456789013, 'author': 'james'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "This is a POST method")
+
+    #tearDown method is called after each test
+    def tearDown(self):
+        pass  # nothing to tear down
+
+class UpdateTextbookTextcases(TestCase):
+    fixtures = ["db.json"]
+    def setUp(self):
+        pass
+
+    def test_success_response(self):  # same as above
+        response = self.client.post(reverse('updateTextbook'), {'id':1 , 'title': 'newTitle'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value['id'],1)
+
+    def test_update_title(self): ##updating just one field works
+        response = self.client.post(reverse('updateTextbook'), {'id':1 , 'title': 'newTitle'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value['title'],'newTitle')
+
+    def test_update_multiple_fields(self): #updating multiple fields
+        response = self.client.post(reverse('updateTextbook'), {'id':1 , 'title': 'newTitle', 'isbn': 123456878, 'author': 'testing'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value['title'], 'newTitle')
+        self.assertEquals(value['isbn'], 123456878)
+        self.assertEquals(value['author'], 'testing')
+
+    def test_Incorrect_type(self): #string for isbn should produce certain response
+        response = self.client.post(reverse('updateTextbook'), {'id':1 , 'isbn': 'newTitle'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, 'you tried to put a string for a isbn')
+
+    def no_id_given(self): #test case for when no id is given
+        response = self.client.post(reverse('updateTextbook'), {'title': 'newTitle'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "No ID specified")
+
+    def test_Get(self): #should check for get methods
+        response = self.client.get(reverse('updateTextbook'), {'id':1 , 'isbn': 'newTitle'})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "This is a POST method")
+
+
+
+    #tearDown method is called after each test
     def tearDown(self):
         pass  # nothing to tear down
 

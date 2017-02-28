@@ -10,8 +10,10 @@ from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from decimal import *
 import json
+
+
 class TextbookForm(forms.Form):
-    title = forms.CharField(label='Title', max_length = 100)
+    title = forms.CharField(label='Title', max_length=100)
     isbn = forms.IntegerField(label='ISBN')
     author = forms.CharField(label='Author')
 
@@ -27,7 +29,8 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-#If an id is specified, return that textbook otherwise return all of them
+
+# If an id is specified, return that textbook otherwise return all of them
 def getTextbooks(request):
     if request.method == 'GET':
         id = request.GET.get('id', False)
@@ -40,50 +43,70 @@ def getTextbooks(request):
         else:
             results = list(Textbook.objects.values())
         return JsonResponse({'results': results})
-    else: return JsonResponse({'results': "this is a GET method"})
+    else:
+        return JsonResponse({'results': "this is a GET method"})
 
-#Delete the textbook as specified by id
+
+# Delete the textbook as specified by id
 def deleteTextbook(request):
     if request.method == 'POST':
         id = request.POST.get('id', False)
         if id:
             try:
                 results = Textbook.objects.get(id=id).delete()
-                return JsonResponse({'results':"Success"})
+                return JsonResponse({'results': "Success"})
             except ObjectDoesNotExist:
-                return JsonResponse({'results':"No textbook found"})
+                return JsonResponse({'results': "No textbook found"})
         else:
-            return JsonResponse({'results':"No ID specified"})
-    else: return JsonResponse({'results':"This is a POST method"})
+            return JsonResponse({'results': "No ID specified"})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
 
 
-#For handling the form to add a textbook to the database
+# For handling the form to add a textbook to the database
 def postTextbookByForm(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = TextbookForm(request.POST)
         if form.is_valid():
-            tx = Textbook.objects.create(title=form.cleaned_data['title'], isbn=form.cleaned_data['isbn'], author=form.cleaned_data['author'], publicationDate="1990-01-01", publisher="Penguin" )
+            tx = Textbook.objects.create(title=form.cleaned_data['title'], isbn=form.cleaned_data['isbn'],
+                                         author=form.cleaned_data['author'], publicationDate="1990-01-01",
+                                         publisher="Penguin")
         form = TextbookForm()
-    #basically reload the index, with new data added
+    # basically reload the index, with new data added
     return index(request)
 
 
 def createTextbook(request):
     if request.method == 'POST':
         try:
-            title1 = request.POST.get('title')
-            isbn1 = request.POST.get('isbn')
-            author1 = request.POST.get('author')
-            publicationDate1 = request.POST.get('pubdate')
-            publisher1 = request.POST.get('publisher')
+            title1 = request.POST.get('title', False)
+            if not title1:
+                return JsonResponse({'results': 'You need a title'})
 
-            Textbook.objects.create(title=request.POST.get('title'), isbn=request.POST.get('isbn'), author=request.POST.get('author'), publicationDate=request.POST.get('pubdate'), publisher=request.POST.get('publisher'))
-            return JsonResponse({'results':'Success'})
+            isbn1 = request.POST.get('isbn', False)
+            if not isbn1 or type(isbn1) is Decimal:
+                return JsonResponse({'results': 'You need a isbn'})
+
+            author1 = request.POST.get('author', False)
+            if not author1:
+                return JsonResponse({'results': 'You need a author'})
+
+            # TODO: need to figure out how to parse date
+
+            Textbook.objects.create(title=request.POST.get('title'), isbn=request.POST.get('isbn'),
+                                    author=request.POST.get('author'), publicationDate=request.POST.get('pubdate'),
+                                    publisher=request.POST.get('publisher'))
+            return JsonResponse({'results': 'Success'})
         except IntegrityError:
-            return JsonResponse({'results':'You need both the title and author to create an entry or your isbn field might be incorrect'})
+            return JsonResponse({'results': 'something went very wrong'})
+        except ValueError:
+            return JsonResponse(
+                {'results': 'you tried to put a string for a isbn'})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
 
 
-#for updating an exisiting textbook
+# for updating an exisiting textbook
 def updateTextbook(request):
     if request.method == 'POST':
         id = request.POST.get('id', False)
@@ -98,8 +121,7 @@ def updateTextbook(request):
                 if newTitle:
                     object.title = newTitle
                 if newIsbn:
-                    if type(newIsbn) is int:
-                        object.isbn=newIsbn
+                    object.isbn = int(newIsbn)
                 if newAuthor:
                     object.author = newAuthor
                 if newPublicationsDate:
@@ -112,13 +134,17 @@ def updateTextbook(request):
                 return JsonResponse({'results': returnObject})
             except ObjectDoesNotExist:
                 return JsonResponse({'results': "No textbook found"})
+            except ValueError:
+                return JsonResponse(
+                    {'results': 'you tried to put a string for a isbn'})
         else:
             return JsonResponse({'results': "No ID specified"})
-    else: return JsonResponse({'results': "This is a POST method"})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
 
 
-#update an existing textbookPost
-def updateTextbook(request):
+# update an existing textbookPost
+def updateTextbookPost(request):
     if request.method == 'POST':
         id = request.POST.get('id', False)
         newPostTitle = request.POST.get('postTitle', False)
@@ -139,7 +165,7 @@ def updateTextbook(request):
                 if newCatagory:
                     object.catagory = newCatagory
                 if newSold:
-                    if newSold == "True" or newSold == "true"  or newSold == "False" or newSold == "false":
+                    if newSold == "True" or newSold == "true" or newSold == "False" or newSold == "false":
                         object.sold = newSold
                 object.save()
                 returnObject = model_to_dict(object)
@@ -152,10 +178,9 @@ def updateTextbook(request):
         return JsonResponse({'results': "This is a POST method"})
 
 
-
-#go to the url, returns out all listings in json format
+# go to the url, returns out all listings in json format
 def getTextbookPost(request):
     results = TextbookPost.objects.values_list()
     return JsonResponse({'results': list(results)})
 
-#haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
+# haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
