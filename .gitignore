@@ -3,3 +3,4 @@
 media/
 uvaTextbookExchange/settings.py
 marketplace/migrations
+log.html
