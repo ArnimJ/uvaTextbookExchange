@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from middleman import views
 
 urlpatterns = [
+    url(r'^gi$', views.index, name='main'),
     url(r'^admin/', include(admin.site.urls)),
+
 ]
+

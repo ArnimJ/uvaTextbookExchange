@@ -158,4 +158,12 @@ def getTextbookPost(request):
     results = TextbookPost.objects.values_list()
     return JsonResponse({'results': list(results)})
 
+
+def getPopularPosts(request):
+    if request.method == 'GET':
+        pop = TextbookPost.objects.order_by('viewCount')[:4].values()
+        return JsonResponse({'results': list(pop)})
+    else:
+        return JsonResponse({'results': "This is a GET method"})
+
 #haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
