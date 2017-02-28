@@ -160,8 +160,25 @@ def updateTextbook(request):
 
 #go to the url, returns out all listings in json format
 def getTextbookPost(request):
-    results = TextbookPost.objects.values_list()
-    return JsonResponse({'results': list(results)})
+ if request.method == 'GET':
+        id = request.GET.get('id', False)
+        filter = request.GET.get('filter', False)
+        results = TextbookPost.objects
+        if id:
+            try:
+                results = results.get(id=id)
+                results = forms.models.model_to_dict(results)
+                return JsonResponse({'results': results})
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No listing found with that ID"})
+        elif filter:
+            results = results.filter(filter)
+        else:
+            results = list(Textbook.objects.values())
+        return JsonResponse({'results': results})
+ else:
+     return JsonResponse({'results': "this is a GET method, you gave " + request.method})
+
 
 #we want to avoid model-level apis this specific in order to reduce clutter on the model
 #level. The solution is basically make our get apis advanced enough that enough filtering
