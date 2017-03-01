@@ -37,5 +37,9 @@ def book_detail(request, id):
     #req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/', {'id': id})
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
     allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    return render(request, 'book_detail.html', {'book_list' : allbooks['results'], 'id': id})
+    book_list = allbooks['results']
+    num = int(id) - 1
+    b = book_list[num]
+    #return render(request, 'book_detail.html', {'book_list' : allbooks['results'], 'id': id})
+    return render(request, 'book_detail.html', {'book': b, 'id': id})
 

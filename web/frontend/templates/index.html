@@ -103,14 +103,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for p1 in postings_list %}
+                            {% for post in postings_list %}
                                 {% for book in book_list %}
-                                    {% for p2 in book.textbookpost_set.all %}
-                                        <h2> youre stupid </h2>
-                                        {% if p1 == p2 %}
+                                    {% if post.textbook_id == book.id %}
                                         <tr>
                                             <td>{{ post.postTitle }}</td>
-                                            <td>{{ book.title }}</td>
+                                            <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
                                             <td>{{ post.condition }}</td>
                                             <td>{{ post.price }}</td>
                                             <td>{{ post.category }}</td>
@@ -118,8 +116,7 @@
                                             <td>{{ post.viewCount }}</td>
                                             <td>{{ post.postDate }}</td>
                                         </tr>
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
                             {% endfor %}
                         </tbody>
