@@ -25,6 +25,10 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
                         <!--
                         <div class="item">
                             <div class="row">
@@ -83,6 +87,45 @@
             <!-- *** HOMEPAGE CAROUSEL END *** -->
         </section>
 
+        <div class="container">
+                    <h1>Popular Posts</h1>
+                    <table id="post_table" class="table table-striped tablesorter">
+                        <thead>
+                            <tr>
+                                <th>Post Title</th>
+                                <th>Textbook</th>
+                                <th>Condition</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Sold</th>
+                                <th>Number Available</th>
+                                <th>Post Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p1 in postings_list %}
+                                {% for book in book_list %}
+                                    {% for p2 in book.textbookpost_set.all %}
+                                        <h2> youre stupid </h2>
+                                        {% if p1 == p2 %}
+                                        <tr>
+                                            <td>{{ post.postTitle }}</td>
+                                            <td>{{ book.title }}</td>
+                                            <td>{{ post.condition }}</td>
+                                            <td>{{ post.price }}</td>
+                                            <td>{{ post.category }}</td>
+                                            <td>{{ post.sold }}
+                                            <td>{{ post.viewCount }}</td>
+                                            <td>{{ post.postDate }}</td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
         <section class="bar background-white">
             <div class="container">
                 <div class="col-md-12">
@@ -94,7 +137,7 @@
                         <div class="col-md-4">
                             <div class="box-simple">
                                 <div class="icon">
-                                    <a href="http://www.google.com" title="Rent"> <i class="fa fa-handshake-o"></i></a>
+                                    <a href="javascript: void(0)" title="Rent"> <i class="fa fa-handshake-o"></i></a>
                                 </div>
                                 <h3>Rent</h3>
                                 <p>Any book, for as long as you need.</p>
@@ -112,7 +155,7 @@
                         <div class="col-md-4">
                             <div class="box-simple">
                                 <div class="icon">
-                                    <a href="http://www.google.com" title="Buy"> <i class="fa fa-dollar"></i></a>
+                                    <a href="javascript: void(0)" title="Buy"> <i class="fa fa-dollar"></i></a>
                                 </div>
                                 <h3>Sell</h3>
                                 <p>Make some extra cash and sell that book you don't read anymore.</p>

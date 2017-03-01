@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index, name='index'),
     url(r'^books/$', views.book_list, name = 'book_list'),
+    url(r'^book_detail/(?P<id>\d+)/$', views.book_detail, name='book_detail'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
