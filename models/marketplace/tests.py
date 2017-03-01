@@ -52,7 +52,7 @@ class GetTextbookTestCases(TestCase):
         response = self.client.post(reverse('allTextbooks'))
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
-        self.assertEquals(value, "this is a GET method")
+        self.assertEquals(value, "this is a GET method, you gave POST")
 
     def test_Incorrect_Id(self): #if invalid id is passed, should a message
         response = self.client.get(reverse('allTextbooks'), {'id': 1000})
@@ -198,10 +198,77 @@ class UpdateTextbookTextcases(TestCase):
         value = response_dict['results']
         self.assertEquals(value, "This is a POST method")
 
-
-
     #tearDown method is called after each test
     def tearDown(self):
         pass  # nothing to tear down
 
+class GetTextbookPostTestCase(TestCase):
+    fixtures = ["db.json"]
 
+    def setUp(self):
+        pass
+
+    def test_success_response(self):  # tests both response and if getting textbook by id works
+        response = self.client.get(reverse('getTextbookPosts'), {'id': 1})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value['id'],1)
+
+    def test_noPramsGiven(self): #no id should return all textbooksposts in db
+        response = self.client.get(reverse('getTextbookPosts'))
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        id_list = []
+        count = 0
+        for i in value:
+            count = count +1
+        self.assertGreaterEqual(count,1)
+
+    def test_method_type(self): #make sure it is a get request
+        response = self.client.post(reverse('getTextbookPosts'), {'id': 1})
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        self.assertEquals(value, "this is a GET method, you gave POST")
+
+class GetPopularPostsTestCases(TestCase):
+    fixtures = ["db.json"]
+
+    def setUp(self):
+        pass
+
+    def test_success_response(self):  # tests both response and api is working
+        response = self.client.get(reverse('getPopularPosts'))
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        count = 0
+        for i in value:
+            count = count +1
+
+        self.assertGreaterEqual(count, 1)
+
+    #Later when the postings actually have views, i will write a unit test to confirm they are in the right order
+    #tearDown method is called after each test
+    def tearDown(self):
+        pass  # nothing to tear down
+
+class TestGetRecentPosts(TestCase):
+    fixtures = ["db.json"]
+
+    def setUp(self):
+        pass
+
+    def test_success_response(self):  # tests both response and api is working
+        response = self.client.get(reverse('getRecentPosts'))
+        response_dict = json.loads(response.content.decode('utf-8'))
+        value = response_dict['results']
+        count = 0
+        for i in value:
+            count = count +1
+
+        self.assertGreaterEqual(count, 1)
+
+    #Later when the postings actually have views, i will write a unit test to confirm they are in the right order
+
+    #tearDown method is called after each test
+    def tearDown(self):
+        pass  # nothing to tear down
