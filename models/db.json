@@ -48,5 +48,33 @@
       "sold" : "False",
       "viewCount": 0
     }
+  },
+    {
+    "model": "marketplace.TextbookPost",
+    "pk": 5,
+    "fields": {
+      "id" : 2,
+      "postTitle": "Interaction Design",
+      "textbook": 2,
+      "condition" : "Used",
+      "price" : 55.00,
+      "category": "HCI",
+      "sold" : "False",
+      "viewCount": 1
+    }
+  },
+    {
+    "model": "marketplace.TextbookPost",
+    "pk": 6,
+    "fields": {
+      "id" : 3,
+      "postTitle": "Microeconomics",
+      "textbook": 3,
+      "condition" : "Used",
+      "price" : 85.00,
+      "category": "Mathematics",
+      "sold" : "False",
+      "viewCount": 2
+    }
   }
 ]
