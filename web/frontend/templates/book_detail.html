@@ -7,7 +7,7 @@
         <ol class="breadcrumb" >
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a href="{% url 'book_list' %}">Buy Books</a></li>
-            <li class="active">{{this_book.title}}</li>
+            <li class="active">{{book.title}}</li>
         </ol>
 
         <div class="col-sm-4">
@@ -15,7 +15,7 @@
         </div>
         <div class="col-sm-8 right">
                                     <h1>Book Title: {{book.title}} </h1>
-                                    <h2>ISBN: {{book.isbn}}</h2>
+                                    <h2>ISBN-13: {{book.isbn}}</h2>
                                     <h2>Author: {{book.author}}</h2>
                                     <h2>Publisher: {{book.publisher}}</h2>
                                     <h2>Publication Date: {{book.publicationDate}}</h2>

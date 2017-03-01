@@ -14,7 +14,7 @@
                         <div class="item">
                             <div class="row">
                                 <div class="col-sm-8 right">
-                                    <h1>Buy|Rent|Sell <em>Textbooks</em></h1>
+                                    <h1><a href="{% url 'book_list' %}"><font color="orange">Buy</font></a>|<a href="javascript: void(0)"><font color="orange">Rent</font></a>|<a href="javascript: void(0)"><font color="orange">Sell</font></a> <em>Textbooks</em></h1>
                                     <p>User to user = no hassle!
                                         <br />Easy to use and convenient!
                                         <br />It's as good as having an entire library in your bed!
@@ -98,7 +98,7 @@
                                 <th>Price</th>
                                 <th>Category</th>
                                 <th>Sold</th>
-                                <th>Number Available</th>
+                                <th>Times Viewed</th>
                                 <th>Post Date</th>
                             </tr>
                         </thead>
@@ -136,7 +136,7 @@
                                 <div class="icon">
                                     <a href="javascript: void(0)" title="Rent"> <i class="fa fa-handshake-o"></i></a>
                                 </div>
-                                <h3>Rent</h3>
+                                <a href=javascript: void(0)"><h3>Rent</h3></a>
                                 <p>Any book, for as long as you need.</p>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                                 <div class="icon">
                                     <a href="{% url 'book_list' %}" title="Buy"> <i class="fa fa-book"></i></a>
                                 </div>
-                                <h3>Buy</h3>
+                                <a href="{% url 'book_list' %}"><h3>Buy</h3></a>
                                 <p>A wide variety to select your very own book.</p>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                                 <div class="icon">
                                     <a href="javascript: void(0)" title="Buy"> <i class="fa fa-dollar"></i></a>
                                 </div>
-                                <h3>Sell</h3>
+                                <a href=javascript: void(0)"><h3>Sell</h3></a>
                                 <p>Make some extra cash and sell that book you don't read anymore.</p>
                             </div>
                         </div>
