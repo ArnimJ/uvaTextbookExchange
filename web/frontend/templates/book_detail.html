@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+
+    <div class="container">
+
+        <ol class="breadcrumb" >
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'book_list' %}">Buy Books</a></li>
+            <li class="active">{{book.title}}</li>
+        </ol>
+
+        <div class="col-sm-4">
+            <img class="img-responsive" src="{% static 'img/book-plain.jpg' %}" style="width: 350px; height:400px" alt="">
+        </div>
+        <div class="col-sm-8 right">
+                                    <h1>Book Title: {{book.title}} </h1>
+                                    <h2>ISBN-13: {{book.isbn}}</h2>
+                                    <h2>Author: {{book.author}}</h2>
+                                    <h2>Publisher: {{book.publisher}}</h2>
+                                    <h2>Publication Date: {{book.publicationDate}}</h2>
+        </div>
+
+
+
+    </div>
+
+
+{% endblock %}

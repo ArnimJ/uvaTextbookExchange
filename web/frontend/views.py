@@ -16,23 +16,30 @@ def index(request):
     #req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
     #allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
 
-    template = loader.get_template('index.html')
     #context = {
     #    'popular' : popular['results'],
     #    'recent' : recent['results'],
     #    'allbooks' : allbooks['results']
     #}
-    #return HttpResponse(template.render(context, request))
-    return render(request, 'index.html', {})
+    #return HttpResponse(template.render(context, request)
+    req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
+    allposts = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
+    allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results']})
 
 def book_list(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')
     allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    #return render(request, 'book_list.html', {})
     return render(request, 'book_list.html', {'book_list': allbooks['results']})
 
-#def book_detail(request, id):
-    #this_book = Books.objects.get(pk=id)
-    #return render(request, 'book_list.html', {
-        #'this_book' : Books.objects.get(pk = id), 'id':id})
+def book_detail(request, id):
+    #req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/', {'id': id})
+    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
+    allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+    book_list = allbooks['results']
+    num = int(id) - 1
+    b = book_list[num]
+    #return render(request, 'book_detail.html', {'book_list' : allbooks['results'], 'id': id})
+    return render(request, 'book_detail.html', {'book': b, 'id': id})
 
