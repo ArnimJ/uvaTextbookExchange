@@ -89,7 +89,7 @@ _________________________________________________________ -->
 
                     <div class="container">
                         <div class="navbar-header">
-                            <a class="navbar-brand home" href="index.html">
+                            <a class="navbar-brand home" href="{% url 'index' %}">
                                 <img src="{% static 'img/mylogo.png' %}" alt="Pack logo" style="position:relative; bottom:5px;">
                                 <!--<img src="img/logo-small.png" alt="Universal logo" class="visible-xs visible-sm"><span class="sr-only">Universal - go to homepage</span>-->
                             </a>
@@ -106,10 +106,10 @@ _________________________________________________________ -->
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="javascript: void(0)">Home</a>
+                                    <a href="{% url 'index' %}">Home</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-sign-in"></i> <span class="hidden-xs text-uppercase">Log in</span></a>
+                                    <a href="javascript: void(0)"><i class="fa fa-sign-in"></i> <span class="hidden-xs text-uppercase">Log in</span></a>
                                 </li>
                                 <li>
                                     <a href="customer-register.html"><i class="fa fa-user"></i> <span class="hidden-xs text-uppercase">Create Account</span></a>

@@ -2,5 +2,41 @@
 {% block body_block %}
 {% load static %}
 
+    <div class="container">
+        <ol class="breadcrumb" >
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="active">Buy Books</li>
+        </ol>
+
+        <h1>Books</h1>
+
+
+        <table id="family_table" class="table table-striped tablesorter">
+    <thead>
+        <tr>
+            <th>Book Title</th>
+            <th>ISBN</th>
+            <th>Author</th>
+            <th>Publication Date</th>
+            <th>Publisher</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in book_list %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publicationDate }}</td>
+                <td>{{ book.publisher }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+
+
+
 {% endblock %}
 

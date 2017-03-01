@@ -26,5 +26,13 @@ def index(request):
     return render(request, 'index.html', {})
 
 def book_list(request):
-    template = loader.get_template('book_list.html')
-    return render(request, 'book_list.html', {})
+    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
+    allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+    #return render(request, 'book_list.html', {})
+    return render(request, 'book_list.html', {'book_list': allbooks['results']})
+
+#def book_detail(request, id):
+    #this_book = Books.objects.get(pk=id)
+    #return render(request, 'book_list.html', {
+        #'this_book' : Books.objects.get(pk = id), 'id':id})
+
