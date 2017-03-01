@@ -44,7 +44,9 @@
       "textbook": 1,
       "condition" : "Used",
       "price" : 45.00,
-      "category": "Mathematics"
+      "category": "Mathematics",
+      "sold" : "False",
+      "viewCount": 0
     }
   }
 ]

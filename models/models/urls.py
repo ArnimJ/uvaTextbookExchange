@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^v1/api/updateTextbookPost/$', views.updateTextbook, name="updatePost"), #update textbook post
     url(r'^v1/api/textbooklistings/', views.getTextbookPost, name="getTextbookPosts"), #read textbook posts
     url(r'^v1/api/popularListings/', views.getPopularPosts, name="getPopularPosts"),
-    url(r'^v1/api/recentListings/', views.getRecentPosts, name="getPopularPosts"),
+    url(r'^v1/api/recentListings/', views.getRecentPosts, name="getRecentPosts"),
 ]

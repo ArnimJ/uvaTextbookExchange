@@ -26,7 +26,7 @@ def index(request):
     return render(request, 'index.html', {})
 
 def book_list(request):
-    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
+    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')
     allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     #return render(request, 'book_list.html', {})
     return render(request, 'book_list.html', {'book_list': allbooks['results']})
