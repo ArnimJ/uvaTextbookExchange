@@ -1,6 +1,6 @@
 *.pyc
 .idea/workspace.xml
 media/
-uvaTextbookExchange/settings.py
-marketplace/migrations
+uvaTextbookExchange/models/settings.py
+uvaTextbookExchange/models/marketplace/migrations
 log.html
