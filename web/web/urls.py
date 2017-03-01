@@ -16,8 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from frontend import views
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.index, name='main')
-]
+    url(r'^$', views.index, name='index'),
+    url(r'^books/$', views.book_list, name = 'book_list'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
