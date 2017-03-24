@@ -201,7 +201,7 @@ def getTextbookPost(request):
         elif filter:
             results = results.filter(filter)
         else:
-            results = list(Textbook.objects.values())
+            results = list(TextbookPost.objects.values())
         return JsonResponse({'results': results})
  else:
      return JsonResponse({'results': "this is a GET method, you gave " + request.method})
