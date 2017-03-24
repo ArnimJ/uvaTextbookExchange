@@ -76,5 +76,34 @@
       "sold" : "False",
       "viewCount": 2
     }
+  },
+      {
+    "model": "marketplace.TextbookPost",
+    "pk": 7,
+    "fields": {
+      "id" : 4,
+      "postTitle": "Macroeconomics",
+      "textbook": 3,
+      "condition" : "Used",
+      "price" : 75.00,
+      "category": "Mathematics",
+      "sold" : "False",
+      "viewCount": 7
+    }
+  },
+      {
+    "model": "marketplace.TextbookPost",
+    "pk": 8,
+    "fields": {
+      "id" : 5,
+      "postTitle": "Microeconomics",
+      "textbook": 3,
+      "condition" : "Used",
+      "price" : 85.00,
+      "category": "Mathematics",
+      "sold" : "False",
+      "viewCount": 6
+    }
   }
+
 ]
