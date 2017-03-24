@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Textbook, TextbookPost
+from .models import Textbook, TextbookPost, User, Authenticator
 from django.views.generic import TemplateView
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
@@ -221,6 +221,38 @@ def getRecentPosts(request):
     else:
         return JsonResponse({'results': "This is a GET method"})
 
+def createUser(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username', False)
+            if not username:
+                return JsonResponse({'results': 'You need a username'})
+
+            passhash = request.POST.get('passhash', False)
+            if not passhash:
+                return JsonResponse({'results': 'You need a password'})
+
+            email = request.POST.get('email', False)
+            if not email:
+                return JsonResponse({'results': 'You need an email'})
+
+            User.objects.create(username=request.POST.get('username'), passhash=request.POST.get('passhash'),
+                                    email=request.POST.get('email'))
+            return JsonResponse({'results': 'Success'})
+        except IntegrityError:
+            return JsonResponse({'results': 'something went very wrong'})
+        except ValueError:
+            return JsonResponse({'results': 'You got a ValueError'})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
+
+def authenticateUser(request):
+    if request.method == 'POST':
+        try:
+            Authenticator.objects.get(id=request.authenticator.user_id)
+            return JsonResponse({'results' : 'success'})
+        except Authenticator.DoesNotExist:
+            return JsonResponse({'results' : 'failure'})
 
 # haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
 

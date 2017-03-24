@@ -22,6 +22,15 @@ class TextbookPost(models.Model):
     viewCount = models.IntegerField(default=0)
     postDate = models.DateField(auto_now=False, auto_now_add=True, blank=True, null=True)
 
+class User(models.Model):
+    username = models.CharField(max_length=15, blank=False)
+    passhash = models.CharField(max_length=50, blank=False)
+    email = models.EmailField()
+
+class Authenticator(models.Model):
+    user_id = models.ForeignKey(User)
+    authenticator = models.IntegerField(blank=False)
+    date_created = models.DateField()
 
 # #each post will have one catagory.
 # class Category(models.Model):
