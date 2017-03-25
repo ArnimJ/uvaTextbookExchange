@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Textbook, TextbookPost, User, Authenticator
 from django.views.generic import TemplateView
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,7 +9,9 @@ from django.db import IntegrityError
 from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from decimal import *
-import json
+from django.urls import reverse
+from django.contrib.auth import hashers
+from web.frontend.forms import NewListingForm, SignupForm, LoginForm
 
 
 class TextbookForm(forms.Form):
@@ -207,6 +209,7 @@ def getTextbookPost(request):
      return JsonResponse({'results': "this is a GET method, you gave " + request.method})
 
 
+
 def getPopularPosts(request):
     if request.method == 'GET':
         pop = TextbookPost.objects.filter(sold=False).order_by('-viewCount')[:4].values()
@@ -249,10 +252,37 @@ def createUser(request):
 def authenticateUser(request):
     if request.method == 'POST':
         try:
-            Authenticator.objects.get(id=request.authenticator.user_id)
+            auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
+            if auth.
             return JsonResponse({'results' : 'success'})
         except Authenticator.DoesNotExist:
             return JsonResponse({'results' : 'failure'})
+
+def logout(request):
+    try:
+        Authenticator.objects.get(user_id=request.authenticator.user_id).delete()
+        return index(request)
+    except:
+        return JsonResponse({'results': 'That user is not logged in'})
+
+
+
+# def login_required(f):
+#     def wrap(request, *args, **kwargs):
+#
+#         # try authenticating the us_validateer
+#         user = authenticateUser(request)
+#
+#
+#         # authentication failed
+#         if not user:
+#             # redirect the user to the login page
+#             return HttpResponseRedirect(reverse('login')+'?next='+current_url)
+#         else:
+#             return f(request, *args, **kwargs)
+#     return wrap
+
+
 
 # haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
 

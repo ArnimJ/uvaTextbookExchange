@@ -2,10 +2,13 @@ from django.shortcuts import render
 import urllib.parse
 import urllib.request
 import json
+import requests
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
+from .forms import NewListingForm, SignupForm, LoginForm
+from models.marketplace.models import Authenticator
 # Create your views here.
 
 def index(request):
@@ -44,4 +47,45 @@ def book_detail(request, id):
     b = book_list[num]
     #return render(request, 'book_detail.html', {'book_list' : allbooks['results'], 'id': id})
     return render(request, 'book_detail.html', {'book': b, 'id': id})
+
+def login(request):
+    # If we received a GET request instead of a POST request
+    if request.method == 'GET':
+        # display the login form page
+        next = request.GET.get('next') or reverse('main')
+        return render('login.html')
+
+    # Creates a new instance of our login_form and gives it our POST data
+    f = LoginForm(request.POST)
+
+    # Check if the form instance is invalid
+    if not f.is_valid():
+      # Form was bad -- send them back to login page and show them an error
+      return render('login.html')
+
+    # Sanitize username and password fields
+    username = f.cleaned_data['username']
+    password = f.cleaned_data['password']
+
+    # Get next page
+    next = f.cleaned_data.get('next') or reverse('home')
+
+    # Send validated information to our experience layer
+    data = {'username':username, 'password':password}
+    resp = requests.post('http://exp-api:8000/v1/api/login', data)
+    resp = json.loads(resp.text)
+
+    # Check if the experience layer said they gave us incorrect information
+    if not resp or not resp['ok']:
+      # Couldn't log them in, send them back to login page with error
+        return render('login.html')
+
+    """ If we made it here, we can log them in. """
+    # Set their login cookie and redirect to back to wherever they came from
+    authenticator = resp['authenticator']
+
+    response = HttpResponseRedirect(next)
+    response.set_cookie("auth", authenticator)
+
+    return response
 
