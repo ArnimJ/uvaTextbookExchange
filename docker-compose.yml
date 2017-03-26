@@ -31,4 +31,4 @@ web:
       - "8000:8000"
    volumes:
       - ./web:/app
-   command: "mod_wsgi-express start-server --working-directory . --reload-on-changes ./web/wsgi.py"
+   command: "mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
