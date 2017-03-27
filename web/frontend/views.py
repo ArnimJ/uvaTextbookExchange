@@ -27,8 +27,8 @@ def index(request):
     #return HttpResponse(template.render(context, request)
     req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
     allposts = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
-    allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+    req2 = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
+    allbooks = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
     req1 = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recentPosts = json.loads(urllib.request.urlopen(req1).read().decode('utf-8'))
     return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results']})
@@ -98,3 +98,7 @@ def createUser(request):
             resp = requests.post('http://exp-api:8000/v1/api/createUser', form.cleaned_data)
             return render(request, reverse('index'))
     return render(request, 'signup.html', {'form' : form})
+
+def register(request):
+    return render(request, 'register.html')
+
