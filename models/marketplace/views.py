@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Textbook, TextbookPost
+from .models import Textbook, TextbookPost, User, Authenticator
 from django.views.generic import TemplateView
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,7 +9,10 @@ from django.db import IntegrityError
 from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from decimal import *
-import json
+from django.urls import reverse
+from django.contrib.auth import hashers
+from web.frontend.forms import NewListingForm, SignupForm, LoginForm
+from datetime import datetime, timedelta
 
 
 class TextbookForm(forms.Form):
@@ -207,6 +210,7 @@ def getTextbookPost(request):
      return JsonResponse({'results': "this is a GET method, you gave " + request.method})
 
 
+
 def getPopularPosts(request):
     if request.method == 'GET':
         pop = TextbookPost.objects.filter(sold=False).order_by('-viewCount')[:4].values()
@@ -220,6 +224,69 @@ def getRecentPosts(request):
         return JsonResponse({'results': list(rec)})
     else:
         return JsonResponse({'results': "This is a GET method"})
+
+def createUser(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username', False)
+            if not username:
+                return JsonResponse({'results': 'You need a username'})
+
+            passhash = request.POST.get('passhash', False)
+            if not passhash:
+                return JsonResponse({'results': 'You need a password'})
+
+            email = request.POST.get('email', False)
+            if not email:
+                return JsonResponse({'results': 'You need an email'})
+
+            User.objects.create(username=request.POST.get('username'), passhash=request.POST.get('passhash'),
+                                    email=request.POST.get('email'))
+            return JsonResponse({'results': 'Success'})
+        except IntegrityError:
+            return JsonResponse({'results': 'something went very wrong'})
+        except ValueError:
+            return JsonResponse({'results': 'You got a ValueError'})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
+
+def authenticateUser(request):
+    if request.method == 'POST':
+        try:  #tests if the user has an authenticator that matches the one the database has for them and is not expired
+            auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
+            if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(days=1):
+                return JsonResponse({'results' : 'success'})
+        except Authenticator.DoesNotExist:
+            pass
+        return JsonResponse({'results' : 'failure'})
+
+def logout(request):
+    try:
+        Authenticator.objects.get(user_id=request.authenticator.user_id).delete()
+        return index(request)
+    except:
+        return JsonResponse({'results': 'That user is not logged in'})
+
+def login(request):
+
+
+
+
+# def login_required(f):
+#     def wrap(request, *args, **kwargs):
+#
+#         # try authenticating the us_validateer
+#         user = authenticateUser(request)
+#
+#
+#         # authentication failed
+#         if not user:
+#             # redirect the user to the login page
+#             return HttpResponseRedirect(reverse('login')+'?next='+current_url)
+#         else:
+#             return f(request, *args, **kwargs)
+#     return wrap
+
 
 
 # haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first

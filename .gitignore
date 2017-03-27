@@ -4,3 +4,4 @@ media/
 uvaTextbookExchange/models/settings.py
 uvaTextbookExchange/models/marketplace/migrations
 log.html
+.idea/
