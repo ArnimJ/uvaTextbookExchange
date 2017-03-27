@@ -2,12 +2,14 @@ from django.shortcuts import render
 import urllib.parse
 import urllib.request
 import json
-import requests
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
-from .forms import NewListingForm, SignupForm, LoginForm
+
+from .forms import *
+# from models.marketplace.models import Authenticator
+
 # Create your views here.
 
 def index(request):
@@ -102,3 +104,14 @@ def createUser(request):
     return render(request, 'register.html', {'form' : form})
 
 
+def selling(request):
+    form = selling()
+    return render(request, 'sell.html', {'form': form})
+
+def buying(request):
+    form = buying()
+    return render(request, 'buy.html', {'form': form})
+
+def loginPage(request):
+    form = LoginForm()
+    return render(request, 'login.html', {'form': form})

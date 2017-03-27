@@ -3,15 +3,15 @@
 {% block body_block %}
 <head>
     <meta charset="UTF-8">
-    <title>Login Here</title>
+    <title>Post Your For Sale or Buying Posts </title>
 </head>
 <body>
-    <form action="/login" method="post">
+    <form action="/your-name/" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Submit" />
     </form>
 </body>
 
-{% endblock %}
 
+{% endblock %}
