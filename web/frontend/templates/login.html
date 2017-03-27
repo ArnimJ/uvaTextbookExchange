@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+<head>
+    <meta charset="UTF-8">
+    <title>Login Here</title>
+</head>
+<body>
+    <form action="/login" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+
+{% endblock %}

@@ -48,19 +48,21 @@ def book_detail(request, id):
     return render(request, 'book_detail.html', {'book': b, 'id': id})
 
 def login(request):
+    form = LoginForm()
     # If we received a GET request instead of a POST request
     if request.method == 'GET':
         # display the login form page
         next = request.GET.get('next') or reverse('index')
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'form':form})
 
     # Creates a new instance of our login_form and gives it our POST data
     f = LoginForm(request.POST)
 
+
     # Check if the form instance is invalid
     if not f.is_valid():
       # Form was bad -- send them back to login page and show them an error
-        return render(request, 'login.html', {'ok': False, 'error':'Incorrect form input'})
+        return render(request, 'login.html', {'ok': False, 'error':'Incorrect form input', 'form':form})
 
     # Sanitize username and password fields
     username = f.cleaned_data['username']
@@ -77,6 +79,7 @@ def login(request):
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
       # Couldn't log them in, send them back to login page with error
+        resp.put('form', form)
         return render(request, 'login.html', resp)
 
     """ If we made it here, we can log them in. """
