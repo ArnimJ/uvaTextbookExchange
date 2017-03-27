@@ -13,6 +13,9 @@ from django.urls import reverse
 from django.contrib.auth import hashers
 from web.frontend.forms import NewListingForm, SignupForm, LoginForm
 from datetime import datetime, timedelta
+import hmac
+import models.settings as settings
+import os
 
 
 class TextbookForm(forms.Form):
@@ -240,6 +243,12 @@ def createUser(request):
             if not email:
                 return JsonResponse({'results': 'You need an email'})
 
+            try:
+                User.objects.get(username=request.POST.get('username'))
+                return JsonResponse({'results' : 'That username is already taken'})
+            except User.DoesNotExist:
+                pass
+
             User.objects.create(username=request.POST.get('username'), passhash=request.POST.get('passhash'),
                                     email=request.POST.get('email'))
             return JsonResponse({'results': 'Success'})
@@ -268,6 +277,46 @@ def logout(request):
         return JsonResponse({'results': 'That user is not logged in'})
 
 def login(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({'results': 'That user does not exist'})
+
+    if not hashers.check_password(password, user.passhash):
+        return JsonResponse({'results' : 'Incorrect password'})
+
+    while(True):
+        authenticator = hmac.new(
+            key = settings.SECRET_KEY.encode('utf-8'),
+            msg = os.urandom(32),
+            digestmod = 'sha256',
+        ).hexdigest()
+        try:
+            Authenticator.objects.get(authenticator=authenticator)
+        except Authenticator.DoesNotExist:
+            break
+
+    try:
+        Authenticator.objects.get(user=user).delete()
+        Authenticator.objects.create(user=user, authenticator=authenticator)
+    except:
+        Authenticator.objects.create(user=user, authenticator=authenticator)
+
+    return _success_response(request)
+
+def _error_response(request, error_msg):
+    return JsonResponse({'ok': False, 'error': error_msg})
+
+def _success_response(request, resp=None):
+    if resp:
+        return JsonResponse({'ok': True, 'resp': resp})
+    else:
+        return JsonResponse({'ok': True})
+
+
+
 
 
 
