@@ -19,3 +19,5 @@ def getRecentPosts(request):
     req = urllib.request.Request('http://models-api:8000/v1/api/recentListings/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     return JsonResponse(json.loads(resp_json))
+
+def createUser(request):

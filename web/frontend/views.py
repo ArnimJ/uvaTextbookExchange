@@ -92,26 +92,9 @@ def login(request):
 def createUser(request):
     if request.method == 'GET':
         form = SignupForm()
-        return 
     else:
-        try:
-            username = request.POST.get('username', False)
-            if not username:
-                return JsonResponse({'results': 'You need a username'})
-
-            passhash = request.POST.get('passhash', False)
-            if not passhash:
-                return JsonResponse({'results': 'You need a password'})
-
-            email = request.POST.get('email', False)
-            if not email:
-                return JsonResponse({'results': 'You need an email'})
-
-            User.objects.create(username=request.POST.get('username'), passhash=request.POST.get('passhash'),
-                                    email=request.POST.get('email'))
-            return JsonResponse({'results': 'Success'})
-        except IntegrityError:
-            return JsonResponse({'results': 'something went very wrong'})
-        except ValueError:
-            return JsonResponse({'results': 'You got a ValueError'})
-
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            resp = requests.post('http://exp-api:8000/v1/api/createUser', form.cleaned_data)
+            return render(request, reverse('index'))
+    return render(request, 'signup.html', {'form' : form})
