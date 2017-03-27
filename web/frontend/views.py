@@ -7,7 +7,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
 from .forms import SignupForm, LoginForm, buying, selling
-from models.marketplace.models import Authenticator
+# from models.marketplace.models import Authenticator
 # Create your views here.
 
 def index(request):

@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^books/$', views.book_list, name = 'book_list'),
     url(r'^book_detail/(?P<id>\d+)/$', views.book_detail, name='book_detail'),
     url(r'^register$', views.register),
-    url(r'^sell$', views.sell),
-    url(r'buy$', views.buy),
+    url(r'^sell$', views.selling),
+    url(r'buy$', views.buying),
     url(r'login$', views.loginPage)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
