@@ -3,6 +3,7 @@ import urllib.request
 import json
 from django.http import HttpResponse, JsonResponse
 import requests
+from django.contrib.auth import hashers
 
 MODELS = 'http://models-api:8000/v1/api/'
 
@@ -25,5 +26,10 @@ def getRecentPosts(request):
 
 def createUser(request):
     data = request.POST
-    resp_json = requests.post(MODELS + 'createUser/')
+    data['passhash'] = hashers.make_password(data['password'])
+    resp_json = requests.post(MODELS + 'createUser/', data)
     return JsonResponse(json.loads(resp_json))
+
+def login(request):
+    resp = requests.post(MODELS + 'login', request.POST)
+    return resp
