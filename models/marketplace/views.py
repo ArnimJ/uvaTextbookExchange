@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from decimal import *
 # from django.urls import reverse
 from django.contrib.auth import hashers
-from web.frontend.forms import *
+#from web.frontend.forms import *
 from datetime import datetime, timedelta
 import hmac
 import models.settings as settings
@@ -318,6 +318,44 @@ def _success_response(request, resp=None):
         return JsonResponse({'ok': True})
 
 
+def createBuyPost (request):
+    if request == 'POST':
+        try:
+            postTitle = request.POST.get('title', False)
+            postTextbook = request.POST.get('textbook', False)
+            postPrice = request.POST.get('price', False)
+            postCondition = request.POST.get('condition', False )
+            postDetail = request.POST.get('details', None)
+
+            TextbookPost.objects.create(title=postTitle, textbook=postTextbook, price=postPrice, condition=postCondition, details=postDetail, type='Buying')
+            return JsonResponse({'results': 'Success'})
+
+        except IntegrityError:
+            return JsonResponse({'results': 'something went very wrong'})
+        except ValueError:
+            return JsonResponse({'results': 'You got a ValueError'})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
+
+def createSellPost(request):
+        if request == 'POST':
+            try:
+                postTitle = request.POST.get('title', False)
+                postTextbook = request.POST.get('textbook', False)
+                postPrice = request.POST.get('price', False)
+                postCondition = request.POST.get('condition', False)
+                postDetail = request.POST.get('details', None)
+
+                TextbookPost.objects.create(title=postTitle, textbook=postTextbook, price=postPrice,
+                                            condition=postCondition, details=postDetail, type='Selling')
+                return JsonResponse({'results': 'Success'})
+
+            except IntegrityError:
+                return JsonResponse({'results': 'something went very wrong'})
+            except ValueError:
+                return JsonResponse({'results': 'You got a ValueError'})
+        else:
+            return JsonResponse({'results': "This is a POST method"})
 
 # def login_required(f):
 #     def wrap(request, *args, **kwargs):

@@ -46,6 +46,7 @@
       "price" : 45.00,
       "category": "Mathematics",
       "sold" : "False",
+      "type" : "Selling",
       "viewCount": 0
     }
   },
@@ -54,12 +55,13 @@
     "pk": 5,
     "fields": {
       "id" : 2,
-      "postTitle": "Interaction Design",
+      "postTitle": "Interaction Design For Sale",
       "textbook": 2,
       "condition" : "Used",
       "price" : 55.00,
       "category": "HCI",
       "sold" : "False",
+      "type" : "Buying",
       "viewCount": 1
     }
   },
@@ -74,6 +76,7 @@
       "price" : 85.00,
       "category": "Mathematics",
       "sold" : "False",
+      "type" : "Buying",
       "viewCount": 2
     }
   },
@@ -88,6 +91,7 @@
       "price" : 75.00,
       "category": "Mathematics",
       "sold" : "False",
+      "type" : "Selling",
       "viewCount": 7
     }
   },
@@ -102,6 +106,7 @@
       "price" : 85.00,
       "category": "Mathematics",
       "sold" : "False",
+      "type" : "Selling",
       "viewCount": 6
     }
   }
