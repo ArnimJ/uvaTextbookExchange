@@ -8,7 +8,6 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
 from .forms import NewListingForm, SignupForm, LoginForm
-from models.marketplace.models import Authenticator
 # Create your views here.
 
 def index(request):
@@ -52,8 +51,8 @@ def login(request):
     # If we received a GET request instead of a POST request
     if request.method == 'GET':
         # display the login form page
-        next = request.GET.get('next') or reverse('main')
-        return render('login.html')
+        next = request.GET.get('next') or reverse('index')
+        return render(request, 'login.html')
 
     # Creates a new instance of our login_form and gives it our POST data
     f = LoginForm(request.POST)
@@ -61,7 +60,7 @@ def login(request):
     # Check if the form instance is invalid
     if not f.is_valid():
       # Form was bad -- send them back to login page and show them an error
-      return render('login.html')
+        return render(request, 'login.html', {'ok': False, 'error':'Incorrect form input'})
 
     # Sanitize username and password fields
     username = f.cleaned_data['username']
@@ -78,7 +77,7 @@ def login(request):
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
       # Couldn't log them in, send them back to login page with error
-        return render('login.html')
+        return render(request, 'login.html', resp)
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from

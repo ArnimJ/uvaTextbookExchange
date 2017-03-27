@@ -11,7 +11,6 @@ from django.forms.models import model_to_dict
 from decimal import *
 from django.urls import reverse
 from django.contrib.auth import hashers
-from web.frontend.forms import NewListingForm, SignupForm, LoginForm
 from datetime import datetime, timedelta
 import hmac
 import models.settings as settings
