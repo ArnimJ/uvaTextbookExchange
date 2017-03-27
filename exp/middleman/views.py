@@ -29,3 +29,7 @@ def createUser(request):
     data['passhash'] = hashers.make_password(data['password'])
     resp_json = requests.post(MODELS + 'createUser/', data)
     return JsonResponse(json.loads(resp_json))
+
+def login(request):
+    resp = requests.post(MODELS + 'login', request.POST)
+    return resp

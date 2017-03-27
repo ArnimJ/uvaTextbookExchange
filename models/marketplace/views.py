@@ -264,17 +264,17 @@ def authenticateUser(request):
         try:  #tests if the user has an authenticator that matches the one the database has for them and is not expired
             auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
             if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(days=1):
-                return JsonResponse({'results' : 'success'})
+                return _success_response(request)
         except Authenticator.DoesNotExist:
             pass
-        return JsonResponse({'results' : 'failure'})
+        return _error_response(request, 'failure')
 
 def logout(request):
     try:
         Authenticator.objects.get(user_id=request.authenticator.user_id).delete()
         return index(request)
     except:
-        return JsonResponse({'results': 'That user is not logged in'})
+        return _error_response(request, 'That user is not logged in')
 
 def login(request):
     username = request.POST.get('username')
@@ -282,10 +282,10 @@ def login(request):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        return JsonResponse({'results': 'That user does not exist'})
+        return _error_response(request, 'That user does not exist')
 
     if not hashers.check_password(password, user.passhash):
-        return JsonResponse({'results' : 'Incorrect password'})
+        return _error_response(request, 'Incorrect password')
 
     while(True):
         authenticator = hmac.new(
@@ -306,6 +306,8 @@ def login(request):
 
     return _success_response(request)
 
+
+
 def _error_response(request, error_msg):
     return JsonResponse({'ok': False, 'error': error_msg})
 
@@ -314,10 +316,6 @@ def _success_response(request, resp=None):
         return JsonResponse({'ok': True, 'resp': resp})
     else:
         return JsonResponse({'ok': True})
-
-
-
-
 
 
 
