@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^v1/api/textbooks/$', views.getTextbooks, name='textbooks'),
     url(r'^v1/api/recentListings/$', views.getRecentPosts, name='recent'),
     url(r'^v1/api/popularListings/$', views.getRecentPosts, name='popular'),
+    url(r'^v1/api/login/', views.login, name="login"),
     url(r'^admin/', include(admin.site.urls)),
 
 ]

@@ -12,6 +12,7 @@ from decimal import *
 from django.urls import reverse
 from django.contrib.auth import hashers
 from web.frontend.forms import NewListingForm, SignupForm, LoginForm
+from datetime import datetime, timedelta
 
 
 class TextbookForm(forms.Form):
@@ -251,12 +252,13 @@ def createUser(request):
 
 def authenticateUser(request):
     if request.method == 'POST':
-        try:
+        try:  #tests if the user has an authenticator that matches the one the database has for them and is not expired
             auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
-            if auth.
-            return JsonResponse({'results' : 'success'})
+            if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(days=1):
+                return JsonResponse({'results' : 'success'})
         except Authenticator.DoesNotExist:
-            return JsonResponse({'results' : 'failure'})
+            pass
+        return JsonResponse({'results' : 'failure'})
 
 def logout(request):
     try:
@@ -264,6 +266,9 @@ def logout(request):
         return index(request)
     except:
         return JsonResponse({'results': 'That user is not logged in'})
+
+def login(request):
+
 
 
 
