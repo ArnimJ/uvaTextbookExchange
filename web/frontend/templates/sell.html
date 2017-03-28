@@ -1,20 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load frontend_extras %}
 {% block body_block %}
 <div class="container">
     <ol class="breadcrumb" >
                 <li><a href="{% url 'index' %}">Home</a></li>
                 <li class="active">Sell</li>
     </ol>
-    <head>
-        <meta charset="UTF-8">
-        <title>Post Your For Sale or Buying Posts </title>
-    </head>
+    <h1>Post Your Book!</h1>
     <body>
-        <form action="/sell/" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit" />
+        <form method="post"> {% csrf_token %}
+            <div class = "well">
+                {% for field in form %}
+                    <div class="form-group col-sm-6">
+                        {{ field.errors }}
+                        <label>{{ field.label }}:</label>
+                        <div>
+                            {{ field|CSS:'form-control' }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Submit" class="'btn btn-info"/>
+            </div>
         </form>
         <div>
             <p>{{text}}</p>
