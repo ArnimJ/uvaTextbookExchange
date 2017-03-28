@@ -42,5 +42,7 @@ urlpatterns = [
 
     #Login apis
     url(r'^v1/api/login/', views.login, name="login"),
+    url(r'^v1/api/createUser/', views.createUser, name="createUser"),
+    url(r'^v1/api/user/', views.getUser, name="getUser"),
 
 ]
