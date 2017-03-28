@@ -228,15 +228,44 @@ def getRecentPosts(request):
         return JsonResponse({'results': "This is a GET method"})
 
 
+def getUser(request):
+ if request.method == 'GET':
+        username = request.GET.get('username', False)
+        id = request.GET.get('id', False)
+        filter = request.GET.get('filter', False)
+        results = User.objects
+        if id:
+            try:
+                results = results.get(id=id)
+                results = forms.models.model_to_dict(results)
+                return JsonResponse({'results': results})
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No user found with that ID"})
+        elif username:
+            try:
+                results = results.get(id=id)
+                results = forms.models.model_to_dict(results)
+                return JsonResponse({'results': results})
+            except ObjectDoesNotExist:
+                return JsonResponse({'results': "No user found with that username"})
+        elif filter:
+            results = results.filter(filter)
+        else:
+            results = list(User.objects.values())
+        return JsonResponse({'results': results})
+ else:
+     return JsonResponse({'results': "this is a GET method, you gave " + request.method})
+
+
 def createUser(request):
     if request.method == 'POST':
         try:
-            username = request.POST.get('username', False)
+            username = request.POST.get('username', "")
             if not username:
                 return JsonResponse({'results': 'You need a username'})
 
-            passhash = request.POST.get('passhash', False)
-            if not passhash:
+            password = request.POST.get('password', False)
+            if not password:
                 return JsonResponse({'results': 'You need a password'})
 
             email = request.POST.get('email', False)
@@ -249,8 +278,12 @@ def createUser(request):
             except User.DoesNotExist:
                 pass
 
-            User.objects.create(username=request.POST.get('username'), passhash=request.POST.get('passhash'),
-                                email=request.POST.get('email'))
+
+            passhash = hashers.make_password(password)
+
+            User.objects.create(username=request.POST.get('username'), passhash=passhash,
+                                    email=request.POST.get('email'))
+
             return JsonResponse({'results': 'Success'})
         except IntegrityError:
             return JsonResponse({'results': 'something went very wrong'})
@@ -304,11 +337,11 @@ def login(request):
 
     try:
         Authenticator.objects.get(user=user).delete()
-        Authenticator.objects.create(user=user, authenticator=authenticator)
+        auth = Authenticator.objects.create(user=user, authenticator=authenticator)
     except:
-        Authenticator.objects.create(user=user, authenticator=authenticator)
+        auth = Authenticator.objects.create(user=user, authenticator=authenticator)
 
-    return _success_response(request)
+    return _success_response(request, auth)
 
 
 def _error_response(request, error_msg):
