@@ -98,7 +98,7 @@ def createUser(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             resp = requests.post('http://exp-api:8000/v1/api/createUser', form.cleaned_data)
-            return render(request, reverse('index'))
+            return HttpResponseRedirect(reverse('index'), resp)
     return render(request, 'register.html', {'form' : form})
 
 

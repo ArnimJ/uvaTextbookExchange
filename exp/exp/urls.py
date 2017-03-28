@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^v1/api/recentListings/$', views.getRecentPosts, name='recent'),
     url(r'^v1/api/popularListings/$', views.getRecentPosts, name='popular'),
     url(r'^v1/api/login/', views.login, name="login"),
-    url(r'^v1/api/createUser/', views.login, name="signup"),
+    url(r'^v1/api/createUser/', views.createUser, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
 
 ]

@@ -25,11 +25,9 @@ def getRecentPosts(request):
     return JsonResponse(json.loads(resp_json))
 
 def createUser(request):
-    data = request.POST
-    data['passhash'] = hashers.make_password(data['password'])
-    resp_json = requests.post(MODELS + 'createUser/', data)
-    return JsonResponse(json.loads(resp_json))
+    resp_json = requests.post(MODELS + 'createUser/', request.POST)
+    return JsonResponse(resp_json.json())
 
 def login(request):
     resp = requests.post(MODELS + 'login', request.POST)
-    return resp
+    return JsonResponse(resp.json())
