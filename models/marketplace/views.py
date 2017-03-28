@@ -9,8 +9,9 @@ from django.db import IntegrityError
 from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from decimal import *
-from django.urls import reverse
+# from django.urls import reverse
 from django.contrib.auth import hashers
+# from web.frontend.forms import *
 from datetime import datetime, timedelta
 import hmac
 import models.settings as settings
@@ -56,7 +57,6 @@ def getTextbooks(request):
 
     else:
         return JsonResponse({'results': "this is a GET method, you gave " + request.method})
-
 
 
 # Delete the textbook as specified by id
@@ -192,7 +192,7 @@ def updateTextbookPost(request):
 
 # go to the url, returns out all listings in json format
 def getTextbookPost(request):
- if request.method == 'GET':
+    if request.method == 'GET':
         id = request.GET.get('id', False)
         filter = request.GET.get('filter', False)
         results = TextbookPost.objects
@@ -208,9 +208,8 @@ def getTextbookPost(request):
         else:
             results = list(TextbookPost.objects.values())
         return JsonResponse({'results': results})
- else:
-     return JsonResponse({'results': "this is a GET method, you gave " + request.method})
-
+    else:
+        return JsonResponse({'results': "this is a GET method, you gave " + request.method})
 
 
 def getPopularPosts(request):
@@ -220,12 +219,14 @@ def getPopularPosts(request):
     else:
         return JsonResponse({'results': "This is a GET method"})
 
+
 def getRecentPosts(request):
     if request.method == 'GET':
         rec = TextbookPost.objects.filter(sold=False).order_by('-postDate')[:4].values()
         return JsonResponse({'results': list(rec)})
     else:
         return JsonResponse({'results': "This is a GET method"})
+
 
 def getUser(request):
  if request.method == 'GET':
@@ -255,6 +256,7 @@ def getUser(request):
  else:
      return JsonResponse({'results': "this is a GET method, you gave " + request.method})
 
+
 def createUser(request):
     if request.method == 'POST':
         try:
@@ -272,7 +274,7 @@ def createUser(request):
 
             try:
                 User.objects.get(username=request.POST.get('username'))
-                return JsonResponse({'results' : 'That username is already taken'})
+                return JsonResponse({'results': 'That username is already taken'})
             except User.DoesNotExist:
                 pass
 
@@ -281,6 +283,7 @@ def createUser(request):
 
             User.objects.create(username=request.POST.get('username'), passhash=passhash,
                                     email=request.POST.get('email'))
+
             return JsonResponse({'results': 'Success'})
         except IntegrityError:
             return JsonResponse({'results': 'something went very wrong'})
@@ -289,15 +292,18 @@ def createUser(request):
     else:
         return JsonResponse({'results': "This is a POST method"})
 
+
 def authenticateUser(request):
     if request.method == 'POST':
-        try:  #tests if the user has an authenticator that matches the one the database has for them and is not expired
+        try:  # tests if the user has an authenticator that matches the one the database has for them and is not expired
             auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
-            if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(days=1):
+            if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(
+                    days=1):
                 return _success_response(request)
         except Authenticator.DoesNotExist:
             pass
         return _error_response(request, 'failure')
+
 
 def logout(request):
     try:
@@ -305,6 +311,7 @@ def logout(request):
         return index(request)
     except:
         return _error_response(request, 'That user is not logged in')
+
 
 def login(request):
     username = request.POST.get('username')
@@ -317,11 +324,11 @@ def login(request):
     if not hashers.check_password(password, user.passhash):
         return _error_response(request, 'Incorrect password')
 
-    while(True):
+    while (True):
         authenticator = hmac.new(
-            key = settings.SECRET_KEY.encode('utf-8'),
-            msg = os.urandom(32),
-            digestmod = 'sha256',
+            key=settings.SECRET_KEY.encode('utf-8'),
+            msg=os.urandom(32),
+            digestmod='sha256',
         ).hexdigest()
         try:
             Authenticator.objects.get(authenticator=authenticator)
@@ -337,15 +344,168 @@ def login(request):
     return _success_response(request, auth)
 
 
-
 def _error_response(request, error_msg):
     return JsonResponse({'ok': False, 'error': error_msg})
+
 
 def _success_response(request, resp=None):
     if resp:
         return JsonResponse({'ok': True, 'resp': resp})
     else:
         return JsonResponse({'ok': True})
+
+
+def createBuyPost(request):
+    if request.method == 'POST':
+        if request.method == 'POST':
+            try:
+
+                postTextbookName = request.POST.get('textbookName', "")
+                postTextbookISBN = request.POST.get('isbn', "")
+                postTextbookAuthor = request.POST.get('author', "")
+
+                if postTextbookName == "" or postTextbookAuthor == "":
+                    return JsonResponse({
+                        "results": "Something was not passed in textbook."
+                    })
+
+
+
+                postTitle = request.POST.get('title', "")
+                postPrice = request.POST.get('price', False)
+                postCondition = request.POST.get('condition', False)
+                postDetail = request.POST.get('details', None)
+
+                if postTitle == "":
+                    return JsonResponse({
+                        "results": "Something was not passed in posttitle."
+                    })
+
+                if postPrice == False:
+                    return JsonResponse({
+                        "results": "Something was not passed in price."
+                    })
+
+                if postCondition == False:
+                    return JsonResponse({
+                        "results": "Something was not passed in condition."
+                    })
+
+                if postDetail == "":
+                    return JsonResponse({
+                        "results": "Something was not passed in detail."
+                    })
+
+
+                # textbook = None
+                # try:
+                #     textbook = Textbook.objects.get(id=postTextbook)
+                # except:
+                #     return JsonResponse({
+                #         "results": "No textbook with that ID found."
+                #     })
+                textbook = Textbook(
+                    title=postTextbookName,
+                    isbn=postTextbookISBN,
+                    author=postTextbookAuthor
+                )
+                textbook.save()
+
+                post = TextbookPost(
+                    postTitle=postTitle,
+                    textbook=textbook,
+                    condition=postCondition,
+                    price=postPrice,
+                    details=postDetail,
+                    sold=False,
+                    type="Buy"
+                )
+                post.save()
+
+                return JsonResponse({'results': 'Success'})
+
+            except IntegrityError:
+                return JsonResponse({'results': 'something went very wrong'})
+            except ValueError:
+                return JsonResponse({'results': 'You got a ValueError'})
+        else:
+            return JsonResponse({'results': "This is a POST method"})
+
+
+def createSellPost(request):
+    if request.method == 'POST':
+        try:
+            postTextbookName = request.POST.get('textbookName', "")
+            postTextbookISBN = request.POST.get('isbn', "")
+            postTextbookAuthor = request.POST.get('author', "")
+
+            if postTextbookName =="" or postTextbookAuthor=="":
+                return JsonResponse({
+                    "results": "Something was not passed in textbook."
+                })
+
+
+
+
+            # try:
+            #     textbook = Textbook.objects.get(id=postTextbook)
+            # except:
+            #     return JsonResponse({
+            #         "results": "No textbook with that ID found."
+            #     })
+
+            postTitle = request.POST.get('title', "")
+            postPrice = request.POST.get('price', False)
+            postCondition = request.POST.get('condition', False)
+            postDetail = request.POST.get('details', None)
+
+            if postTitle == "":
+                return JsonResponse({
+                    "results": "Something was not passed in posttitle."
+                })
+
+            if postPrice == False:
+                return JsonResponse({
+                    "results": "Something was not passed in price."
+                })
+
+            if postCondition == False:
+                return JsonResponse({
+                    "results": "Something was not passed in condition."
+                })
+
+            if postDetail == "":
+                return JsonResponse({
+                    "results": "Something was not passed in detail."
+                })
+
+
+            textbook = Textbook(
+                title=postTextbookName,
+                isbn=postTextbookISBN,
+                author=postTextbookAuthor
+            )
+            textbook.save()
+
+            post = TextbookPost(
+                postTitle=postTitle,
+                textbook=textbook,
+                condition=postCondition,
+                price=postPrice,
+                details=postDetail,
+                sold=False,
+                type="Sell"
+            )
+            post.save()
+
+            return JsonResponse({'results': 'Success'})
+
+        except IntegrityError:
+            return JsonResponse({'results': 'something went very wrong'})
+        except ValueError:
+            return JsonResponse({'results': 'You got a ValueError'})
+    else:
+        return JsonResponse({'results': "This is a POST method"})
 
 
 
@@ -368,8 +528,7 @@ def _success_response(request, resp=None):
 
 # haven't done textbookPost POST capabilities because I'd rather have a direction to go in (ie actually implementing functionality) first
 
-#we want to avoid model-level apis this specific in order to reduce clutter on the model
-#level. The solution is basically make our get apis advanced enough that enough filtering
-#and such parameters can be passed through that we can accomplish this through a more basic
-#getPost method
-
+# we want to avoid model-level apis this specific in order to reduce clutter on the model
+# level. The solution is basically make our get apis advanced enough that enough filtering
+# and such parameters can be passed through that we can accomplish this through a more basic
+# getPost method

@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^v1/api/login/', views.login, name="login"),
     url(r'^v1/api/createUser/', views.createUser, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
-
+    url(r'^v1/api/createBuyPost/', views.createBuyPost),
+    url(r'^v1/api/createSellPost/', views.createSellPost)
 ]
 

@@ -24,6 +24,14 @@ def getRecentPosts(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     return JsonResponse(json.loads(resp_json))
 
+def createBuyPost(request):
+    resp = requests.post(MODELS + 'createBuyPost/', request.POST)
+    return resp
+
+def createSellPost(request):
+    resp = requests.post(MODELS + 'createSellPost/', request.POST)
+    return JsonResponse(resp.json())
+
 def createUser(request):
     resp_json = requests.post(MODELS + 'createUser/', request.POST)
     return JsonResponse(resp_json.json())
@@ -31,3 +39,4 @@ def createUser(request):
 def login(request):
     resp = requests.post(MODELS + 'login', request.POST)
     return JsonResponse(resp.json())
+

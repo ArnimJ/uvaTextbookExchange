@@ -24,16 +24,25 @@ urlpatterns = [
     url(r'^$', views.index, name='main'),
 
     #API urls
-    url(r'^v1/api/textbooks/$', views.getTextbooks, name="allTextbooks"),     #read
-    url(r'^v1/api/textbooks/delete/$', views.deleteTextbook, name="deleteBook"), #delete
-    url(r'^v1/api/textbooks/create/$', views.createTextbook, name="createTextbook"), #create
-    url(r'^v1/api/textbooks/updateTextbook/$', views.updateTextbook, name="updateTextbook"), #update
+
+    #textbook apis
+    url(r'^v1/api/textbooks/', views.getTextbooks, name="allTextbooks"),     #read
+    url(r'^v1/api/textbooks/delete/', views.deleteTextbook, name="deleteBook"), #delete
+    url(r'^v1/api/textbooks/create/', views.createTextbook, name="createTextbook"), #create
+    url(r'^v1/api/textbooks/updateTextbook/', views.updateTextbook, name="updateTextbook"), #update
+
+    #textbook posts apis
     url(r'^v1/api/postTextbookByForm/', views.postTextbookByForm, name="postTextbook"), #create textbook post
-    url(r'^v1/api/updateTextbookPost/$', views.updateTextbook, name="updatePost"), #update textbook post
+    url(r'^v1/api/updateTextbookPost/', views.updateTextbook, name="updatePost"), #update textbook post
     url(r'^v1/api/textbooklistings/', views.getTextbookPost, name="getTextbookPosts"), #read textbook posts
-    url(r'^v1/api/popularListings/', views.getPopularPosts, name="getPopularPosts"),
-    url(r'^v1/api/recentListings/', views.getRecentPosts, name="getRecentPosts"),
+    url(r'^v1/api/createBuyPost/', views.createBuyPost, name="createBuy"),  # create a new buy post
+    url(r'^v1/api/createSellPost/', views.createSellPost, name="createSell"),  # create a new sell post
+    url(r'^v1/api/popularListings/', views.getPopularPosts, name="getPopularPosts"), #popular textbook posts
+    url(r'^v1/api/recentListings/', views.getRecentPosts, name="getRecentPosts"), #recent posts
+
+    #Login apis
     url(r'^v1/api/login/', views.login, name="login"),
     url(r'^v1/api/createUser/', views.createUser, name="createUser"),
     url(r'^v1/api/user/', views.getUser, name="getUser"),
+
 ]
