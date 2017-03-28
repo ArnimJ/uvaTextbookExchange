@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body_block %}
-<head>
-    <meta charset="UTF-8">
-    <title>Post Your For Sale or Buying Posts </title>
-</head>
-<body>
-    <form action="/sell/" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
-
-<div>
-    <p>{{text}}</p>
+<div class="container">
+    <ol class="breadcrumb" >
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li class="active">Sell</li>
+    </ol>
+    <head>
+        <meta charset="UTF-8">
+        <title>Post Your For Sale or Buying Posts </title>
+    </head>
+    <body>
+        <form action="/sell/" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+        <div>
+            <p>{{text}}</p>
+         </div>
+    </body>
 </div>
-</body>
 {% endblock %}
