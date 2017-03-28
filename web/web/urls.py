@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^login/', views.login, name='login'),
 
 
-    url(r'^sell/', views.selling),
+    url(r'^sell/', views.selling, name = 'sell'),
     url(r'buy/', views.buying),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
