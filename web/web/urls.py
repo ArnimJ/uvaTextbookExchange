@@ -28,6 +28,6 @@ urlpatterns = [
     url(r'^register$', views.register),
     url(r'^sell$', views.selling),
     url(r'buy$', views.buying),
-     url(r'^login$', views.login, name='login')
+    url(r'^login$', views.login, name='login')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

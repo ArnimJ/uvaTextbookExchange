@@ -82,7 +82,7 @@ def login(request):
     if not resp or not resp['ok']:
       # Couldn't log them in, send them back to login page with error
         resp.put('form', form)
-        return render(request, 'login.html', resp)
+        return render(request, 'login.html', {'form': form})
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
@@ -105,13 +105,14 @@ def createUser(request):
 
 
 def selling(request):
-    form = selling()
-    return render(request, 'sell.html', {'form': form})
+    if request.method == 'GET':
+        form = SellingForm()
+        return render(request, 'sell.html', {'form': form})
 
 def buying(request):
-    form = buying()
-    return render(request, 'buy.html', {'form': form})
+    if request.method == 'GET':
+        form = BuyingForm()
+        return render(request, 'buy.html', {'form': form})
 
-def loginPage(request):
-    form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+def register(request):
+    return render(request, 'register.html')

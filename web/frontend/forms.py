@@ -10,17 +10,19 @@ class LoginForm(forms.Form):
     username = forms.CharField(label='Username', max_length=20)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}), label="Password")
 
-class selling(forms.Form):
+class SellingForm(forms.Form):
     title = forms.CharField(max_length=70)
-    c1 = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'))
+    textbook = forms.CharField(max_length=200)
+    c = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'))
     price = forms.DecimalField(required=True)
-    condition = forms.ChoiceField(required=False)
+    condition = forms.ChoiceField(required=False, choices=c)
     details = forms.CharField(max_length=400, required=False, widget=forms.Textarea)
 
 
-class buying(forms.Form):
+class BuyingForm(forms.Form):
     title = forms.CharField(max_length=70)
-    c1 = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'))
+    textbook = forms.CharField(max_length=200)
+    c = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'), ('Not Important', 'Not Important'))
     price = forms.DecimalField(required=True)
-    condition = forms.ChoiceField( required=False)
+    condition = forms.ChoiceField( required=False, choices=c)
     details = forms.CharField(max_length=400, required=False, widget=forms.Textarea)
