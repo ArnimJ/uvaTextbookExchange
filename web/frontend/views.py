@@ -121,11 +121,14 @@ def selling(request):
 def buying(request):
     if request.method == 'GET':
         form = BuyingForm()
+        text = " "
     else:
         form = BuyingForm(request.POST)
         if form.is_valid():
             resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
-    return render(request, 'buy.html', {'form': form})
+            text = resp.json()["results"]
+
+    return render(request, 'buy.html', {'form': form, 'text': text})
 
 def register(request):
     return render(request, 'register.html')

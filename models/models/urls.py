@@ -42,5 +42,4 @@ urlpatterns = [
 
     #Login apis
     url(r'^v1/api/login/', views.login, name="login"),
-
 ]
