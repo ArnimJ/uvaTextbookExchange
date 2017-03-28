@@ -52,6 +52,7 @@ def book_detail(request, id):
 
 def login(request):
     form = LoginForm()
+    text = " "
     # If we received a GET request instead of a POST request
     if request.method == 'GET':
         # display the login form page
@@ -72,18 +73,27 @@ def login(request):
     password = f.cleaned_data['password']
 
     # Get next page
-    next = f.cleaned_data.get('next') or reverse('home')
+    next = f.cleaned_data.get('next') or reverse('index')
 
     # Send validated information to our experience layer
     data = {'username':username, 'password':password}
-    resp = requests.post('http://exp-api:8000/v1/api/login', data)
-    resp = json.loads(resp.text)
+    resp = requests.post('http://exp-api:8000/v1/api/login/', data)
+
+    struct = {}
+    try:
+        dataform = str(resp).strip("'<>() ").replace('\'', '\"')
+        struct = json.loads(dataform)
+        text = struct["results"]
+
+    except:
+        print(repr(resp))
+
 
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
       # Couldn't log them in, send them back to login page with error
         resp.put('form', form)
-        return render(request, 'login.html', {'form': form})
+        return render(request, 'login.html', {'form': form, 'text': text})
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
@@ -102,7 +112,7 @@ def createUser(request):
     else:
         form = SignupForm(request.POST)
         if form.is_valid():
-            resp = requests.post('http://exp-api:8000/v1/api/createUser', form.cleaned_data)
+            resp = requests.post('http://exp-api:8000/v1/api/createUser/', form.cleaned_data)
             struct = {}
             try:
                 dataform = str(resp).strip("'<>() ").replace('\'', '\"')
@@ -110,7 +120,7 @@ def createUser(request):
                 text = struct["results"]
             except:
                 print (repr(resp))
-            #return HttpResponseRedirect(reverse('index'), resp)
+            return HttpResponseRedirect('/')
 
     return render(request, 'newUser.html', {'form' : form, "text":text})
 
