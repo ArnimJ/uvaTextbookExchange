@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+<head>
+    <meta charset="UTF-8">
+    <title>Register as a New User</title>
+</head>
+<body>
+    <form action="/register/" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+
+<div>
+    <p>{{text}}</p>
+</div>
+
+</body>
+{% endblock %}

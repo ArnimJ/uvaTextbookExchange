@@ -95,14 +95,24 @@ def login(request):
     return response
 
 def createUser(request):
+    text = " "
     if request.method == 'GET':
         form = SignupForm()
+
     else:
         form = SignupForm(request.POST)
         if form.is_valid():
             resp = requests.post('http://exp-api:8000/v1/api/createUser', form.cleaned_data)
-            return HttpResponseRedirect(reverse('index'), resp)
-    return render(request, 'register.html', {'form' : form})
+            struct = {}
+            try:
+                dataform = str(resp).strip("'<>() ").replace('\'', '\"')
+                struct = json.loads(dataform)
+                text = struct["results"]
+            except:
+                print (repr(resp))
+            #return HttpResponseRedirect(reverse('index'), resp)
+
+    return render(request, 'newUser.html', {'form' : form, "text":text})
 
 
 def selling(request):
@@ -130,8 +140,8 @@ def buying(request):
 
     return render(request, 'buy.html', {'form': form, 'text': text})
 
-def register(request):
-    return render(request, 'register.html')
+# def register(request):
+#     return render(request, 'register.html')
 
 
 

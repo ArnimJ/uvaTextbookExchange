@@ -260,7 +260,7 @@ def getUser(request):
 def createUser(request):
     if request.method == 'POST':
         try:
-            username = request.POST.get('username', "")
+            username = request.POST.get('username', False)
             if not username:
                 return JsonResponse({'results': 'You need a username'})
 
@@ -281,10 +281,11 @@ def createUser(request):
 
             passhash = hashers.make_password(password)
 
-            User.objects.create(username=request.POST.get('username'), passhash=passhash,
-                                    email=request.POST.get('email'))
+            User(username=username, passhash=passhash,
+                                    email=email).save()
 
             return JsonResponse({'results': 'Success'})
+
         except IntegrityError:
             return JsonResponse({'results': 'something went very wrong'})
         except ValueError:

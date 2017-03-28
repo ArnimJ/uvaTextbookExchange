@@ -25,9 +25,9 @@ class TextbookPost(models.Model):
     postDate = models.DateField(auto_now=False, auto_now_add=True, blank=True, null=True)
 
 class User(models.Model):
-    username = models.CharField(max_length=20, blank=False)
-    passhash = models.CharField(max_length=50, blank=False)
-    email = models.EmailField()
+    username = models.CharField(max_length=20, blank=False, null=False)
+    passhash = models.TextField(blank=False, null=False)
+    email = models.EmailField(blank=False, null=False)
 
 class Authenticator(models.Model):
     user_id = models.ForeignKey(User)

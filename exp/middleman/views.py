@@ -26,15 +26,15 @@ def getRecentPosts(request):
 
 def createBuyPost(request):
     resp = requests.post(MODELS + 'createBuyPost/', request.POST)
-    return resp
+    return JsonResponse(resp.json())
 
 def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST)
     return JsonResponse(resp.json())
 
 def createUser(request):
-    resp_json = requests.post(MODELS + 'createUser/', request.POST)
-    return JsonResponse(resp_json.json())
+    resp = requests.post(MODELS + 'createUser/', request.POST)
+    return JsonResponse(resp.json())
 
 def login(request):
     resp = requests.post(MODELS + 'login', request.POST)

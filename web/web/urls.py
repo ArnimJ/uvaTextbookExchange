@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^register/', views.createUser, name='register'),
     url(r'^login/', views.login, name='login'),
 
-    url(r'^register/', views.register),
+
     url(r'^sell/', views.selling),
     url(r'buy/', views.buying),
 
