@@ -24,6 +24,14 @@ def getRecentPosts(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     return JsonResponse(json.loads(resp_json))
 
+def createBuyPost(request):
+    resp = requests.post(MODELS + 'createBuyPost/', request.POST)
+    return resp
+
+def createSellPost(request):
+    resp = requests.post(MODELS + 'createSellPost/', request.POST)
+    return resp
+
 def createUser(request):
     data = request.POST
     data['passhash'] = hashers.make_password(data['password'])
@@ -31,5 +39,5 @@ def createUser(request):
     return JsonResponse(json.loads(resp_json))
 
 def login(request):
-    resp = requests.post(MODELS + 'login', request.POST)
+    resp = requests.post(MODELS + 'login/', request.POST)
     return resp

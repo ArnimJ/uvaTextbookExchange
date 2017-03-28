@@ -17,6 +17,7 @@ class TextbookPost(models.Model):
     textbook = models.ForeignKey(Textbook)
     condition = models.CharField(max_length=70)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    category = models.CharField(max_length=70, null=True)
     details = models.CharField(max_length=300)
     sold = models.BooleanField(default=False)
     type = models.CharField(max_length=10)
