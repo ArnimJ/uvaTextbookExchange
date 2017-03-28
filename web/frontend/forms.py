@@ -12,7 +12,12 @@ class LoginForm(forms.Form):
 
 class SellingForm(forms.Form):
     title = forms.CharField(max_length=70)
-    textbook = forms.CharField(max_length=200)
+    
+    #textbook = forms.CharField(max_length=200)
+    textbookName = forms.CharField(max_length=200)
+    isbn = forms.IntegerField(required=False)
+    author = forms.CharField(max_length=100)
+    
     c = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'))
     price = forms.DecimalField(required=True)
     condition = forms.ChoiceField(required=False, choices=c)
@@ -21,7 +26,11 @@ class SellingForm(forms.Form):
 
 class BuyingForm(forms.Form):
     title = forms.CharField(max_length=70)
-    textbook = forms.CharField(max_length=200)
+    
+    textbookName = forms.CharField(max_length=200)
+    isbn = forms.IntegerField(required=False)
+    author = forms.CharField(max_length=100)
+    
     c = (('New', 'New'), ('Good', 'Good'), ('Acceptable', 'Acceptable'), ('Used', 'Used'), ('Not Important', 'Not Important'))
     price = forms.DecimalField(required=True)
     condition = forms.ChoiceField( required=False, choices=c)

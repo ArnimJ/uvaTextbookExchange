@@ -6,10 +6,14 @@
     <title>Post Your For Sale or Buying Posts </title>
 </head>
 <body>
-    <form action="/your-name/" method="post">
+    <form action="/sell/" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />
     </form>
+
+<div>
+    <p>{{text}}</p>
+</div>
 </body>
 {% endblock %}

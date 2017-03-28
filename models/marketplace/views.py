@@ -326,24 +326,57 @@ def createBuyPost(request):
     if request.method == 'POST':
         if request.method == 'POST':
             try:
-                postTitle = request.POST.get('postTitle', "")
-                postTextbook = request.POST.get('textbook', "")
+
+                postTextbookName = request.POST.get('textbookName', "")
+                postTextbookISBN = request.POST.get('isbn', "")
+                postTextbookAuthor = request.POST.get('author', "")
+
+                if postTextbookName == "" or postTextbookAuthor == "":
+                    return JsonResponse({
+                        "results": "Something was not passed in textbook."
+                    })
+
+
+
+                postTitle = request.POST.get('title', "")
                 postPrice = request.POST.get('price', False)
                 postCondition = request.POST.get('condition', False)
                 postDetail = request.POST.get('details', None)
 
-                if postTitle == "" or postTextbook == "" or postPrice == "" or postCondition == "" or postDetail == "":
+                if postTitle == "":
                     return JsonResponse({
-                        "results": "Something was not passed in."
+                        "results": "Something was not passed in posttitle."
                     })
 
-                textbook = None
-                try:
-                    textbook = Textbook.objects.get(id=postTextbook)
-                except:
+                if postPrice == False:
                     return JsonResponse({
-                        "results": "No textbook with that ID found."
+                        "results": "Something was not passed in price."
                     })
+
+                if postCondition == False:
+                    return JsonResponse({
+                        "results": "Something was not passed in condition."
+                    })
+
+                if postDetail == "":
+                    return JsonResponse({
+                        "results": "Something was not passed in detail."
+                    })
+
+
+                # textbook = None
+                # try:
+                #     textbook = Textbook.objects.get(id=postTextbook)
+                # except:
+                #     return JsonResponse({
+                #         "results": "No textbook with that ID found."
+                #     })
+                textbook = Textbook(
+                    title=postTextbookName,
+                    isbn=postTextbookISBN,
+                    author=postTextbookAuthor
+                )
+                textbook.save()
 
                 post = TextbookPost(
                     postTitle=postTitle,
@@ -369,24 +402,57 @@ def createBuyPost(request):
 def createSellPost(request):
     if request.method == 'POST':
         try:
-            postTitle = request.POST.get('postTitle', "")
-            postTextbook = request.POST.get('textbook', "")
+            postTextbookName = request.POST.get('textbookName', "")
+            postTextbookISBN = request.POST.get('isbn', "")
+            postTextbookAuthor = request.POST.get('author', "")
+
+            if postTextbookName =="" or postTextbookAuthor=="":
+                return JsonResponse({
+                    "results": "Something was not passed in textbook."
+                })
+
+
+
+
+            # try:
+            #     textbook = Textbook.objects.get(id=postTextbook)
+            # except:
+            #     return JsonResponse({
+            #         "results": "No textbook with that ID found."
+            #     })
+
+            postTitle = request.POST.get('title', "")
             postPrice = request.POST.get('price', False)
             postCondition = request.POST.get('condition', False)
             postDetail = request.POST.get('details', None)
 
-            if postTitle == "" or postTextbook == "" or postPrice == "" or postCondition == "" or postDetail == "":
+            if postTitle == "":
                 return JsonResponse({
-                    "results": "Something was not passed in."
+                    "results": "Something was not passed in posttitle."
                 })
 
-            textbook = None
-            try:
-                textbook = Textbook.objects.get(id=postTextbook)
-            except:
+            if postPrice == False:
                 return JsonResponse({
-                    "results": "No textbook with that ID found."
+                    "results": "Something was not passed in price."
                 })
+
+            if postCondition == False:
+                return JsonResponse({
+                    "results": "Something was not passed in condition."
+                })
+
+            if postDetail == "":
+                return JsonResponse({
+                    "results": "Something was not passed in detail."
+                })
+
+
+            textbook = Textbook(
+                title=postTextbookName,
+                isbn=postTextbookISBN,
+                author=postTextbookAuthor
+            )
+            textbook.save()
 
             post = TextbookPost(
                 postTitle=postTitle,

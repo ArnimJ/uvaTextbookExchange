@@ -30,7 +30,7 @@ def createBuyPost(request):
 
 def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST)
-    return resp
+    return JsonResponse(resp.json())
 
 def createUser(request):
     data = request.POST
