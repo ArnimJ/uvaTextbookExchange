@@ -31,8 +31,8 @@ class User(models.Model):
 
 class Authenticator(models.Model):
     user_id = models.ForeignKey(User)
-    authenticator = models.IntegerField(blank=False)
-    date_created = models.DateField()
+    authenticator = models.TextField(blank=False, null=False)
+    date_created = models.DateField(auto_now=False, auto_now_add=True, blank=True, null=True)
 
 # #each post will have one catagory.
 # class Category(models.Model):

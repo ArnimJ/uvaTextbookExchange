@@ -84,7 +84,6 @@ def login(request):
         dataform = str(resp).strip("'<>() ").replace('\'', '\"')
         struct = json.loads(dataform)
         text = struct["results"]
-
     except:
         print(repr(resp))
 
@@ -92,7 +91,6 @@ def login(request):
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
       # Couldn't log them in, send them back to login page with error
-        resp.put('form', form)
         return render(request, 'login.html', {'form': form, 'text': text})
 
     """ If we made it here, we can log them in. """
@@ -168,4 +166,3 @@ def buying(request):
 
 
 
-    

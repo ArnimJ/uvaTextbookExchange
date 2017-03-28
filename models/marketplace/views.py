@@ -338,9 +338,9 @@ def login(request):
 
     try:
         Authenticator.objects.get(user=user).delete()
-        auth = Authenticator.objects.create(user=user, authenticator=authenticator)
+        auth = Authenticator.objects.create(user_id=user, authenticator=authenticator)
     except:
-        auth = Authenticator.objects.create(user=user, authenticator=authenticator)
+        auth = Authenticator.objects.create(user_id=user, authenticator=authenticator)
 
     return _success_response(request, auth)
 
