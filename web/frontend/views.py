@@ -89,18 +89,24 @@ def login(request):
 
 
     # Check if the experience layer said they gave us incorrect information
-    if not resp or not resp['ok']:
+    if not resp or not resp.json()['ok']:
       # Couldn't log them in, send them back to login page with error
         return render(request, 'login.html', {'form': form, 'text': text})
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
-    authenticator = resp['authenticator']
+    resp = resp.json()
+    authenticator = resp['resp']['authenticator']
 
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
 
     return response
+
+def logout(request):
+    if 'auth' in request.COOKIES:
+        resp = requests.post('http://exp-api:8000/v1/api/logout/', request.COOKIES)
+    return HttpResponseRedirect('/')
 
 def createUser(request):
     text = " "
@@ -118,12 +124,18 @@ def createUser(request):
                 text = struct["results"]
             except:
                 print (repr(resp))
+            if resp['ok']:
+                login = requests.post('http://exp-api:8000/v1/api/createUser/', {'username': form.cleaned_data['username'], 'password': form.cleaned_data['password']})
             return HttpResponseRedirect('/')
 
     return render(request, 'newUser.html', {'form' : form, "text":text})
 
 
 def selling(request):
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
+    if not auth_check.json()['ok']:
+        return HttpResponseRedirect('/')
+
     if request.method == 'GET':
         form = SellingForm()
         text = " "

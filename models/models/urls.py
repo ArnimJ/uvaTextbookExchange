@@ -43,5 +43,7 @@ urlpatterns = [
     url(r'^v1/api/createUser/', views.createUser, name="createUser"),
     url(r'^v1/api/user/', views.getUser, name="getUser"),
     url(r'^v1/api/login/', views.login, name="login"),
+    url(r'^v1/api/logout/', views.logout, name="logout"),
+    url(r'^v1/api/authenticate/', views.authenticateUser, name="authenticate"),
 
 ]
