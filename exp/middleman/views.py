@@ -39,7 +39,6 @@ def createUser(request):
 
 def login(request):
     resp = requests.post(MODELS + 'login/', request.POST)
-    other=resp.text
     return JsonResponse(resp.json())
 
 def logout(request):

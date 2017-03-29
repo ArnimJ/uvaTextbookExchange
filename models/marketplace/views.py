@@ -307,7 +307,7 @@ def authenticateUser(request):
 
 def logout(request):
     try:
-        Authenticator.objects.get(user_id=request.POST['user_id']).delete()
+        Authenticator.objects.get(authenticator=request.POST['auth']).delete()
         return _success_response(request, 'User logged out successfully')
     except:
         return _error_response(request, 'That user is not logged in')
