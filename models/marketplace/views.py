@@ -13,6 +13,7 @@ from decimal import *
 from django.contrib.auth import hashers
 # from web.frontend.forms import *
 from datetime import datetime, timedelta
+from django.utils import timezone
 import hmac
 import models.settings as settings
 import os
@@ -293,13 +294,11 @@ def createUser(request):
     else:
         return JsonResponse({'results': "This is a POST method"})
 
-
 def authenticateUser(request):
     if request.method == 'POST':
         try:  # tests if the user has an authenticator that matches the one the database has for them and is not expired
-            auth = Authenticator.objects.get(user_id=request.authenticator.user_id)
-            if auth.authenticator == request.auth.authenticator and request.auth.date_created > datetime.now() - timedelta(
-                    days=1):
+            auth = Authenticator.objects.get(authenticator=request.POST.get('auth'))
+            if (auth.date_created > timezone.now() - timedelta(days=1)):
                 return _success_response(request)
         except Authenticator.DoesNotExist:
             pass
@@ -308,8 +307,8 @@ def authenticateUser(request):
 
 def logout(request):
     try:
-        Authenticator.objects.get(user_id=request.authenticator.user_id).delete()
-        return index(request)
+        Authenticator.objects.get(user_id=request.POST['user_id']).delete()
+        return _success_response(request, 'User logged out successfully')
     except:
         return _error_response(request, 'That user is not logged in')
 
@@ -337,11 +336,13 @@ def login(request):
             break
 
     try:
-        Authenticator.objects.get(user=user).delete()
+        Authenticator.objects.get(user_id=user).delete()
         auth = Authenticator.objects.create(user_id=user, authenticator=authenticator)
     except:
         auth = Authenticator.objects.create(user_id=user, authenticator=authenticator)
 
+    auth.save()
+    auth = model_to_dict(auth)
     return _success_response(request, auth)
 
 
@@ -509,21 +510,6 @@ def createSellPost(request):
         return JsonResponse({'results': "This is a POST method"})
 
 
-
-# def login_required(f):
-#     def wrap(request, *args, **kwargs):
-#
-#         # try authenticating the us_validateer
-#         user = authenticateUser(request)
-#
-#
-#         # authentication failed
-#         if not user:
-#             # redirect the user to the login page
-#             return HttpResponseRedirect(reverse('login')+'?next='+current_url)
-#         else:
-#             return f(request, *args, **kwargs)
-#     return wrap
 
 
 

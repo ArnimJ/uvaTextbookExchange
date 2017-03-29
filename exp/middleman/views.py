@@ -4,6 +4,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 import requests
 from django.contrib.auth import hashers
+import pdb
 
 MODELS = 'http://models-api:8000/v1/api/'
 
@@ -29,14 +30,36 @@ def createBuyPost(request):
     return JsonResponse(resp.json())
 
 def createSellPost(request):
-    resp = requests.post(MODELS + 'createSellPost/', request.POST)
-    return JsonResponse(resp.json())
+        resp = requests.post(MODELS + 'createSellPost/', request.POST)
+        return JsonResponse(resp.json())
 
 def createUser(request):
     resp = requests.post(MODELS + 'createUser/', request.POST)
     return JsonResponse(resp.json())
 
 def login(request):
-    resp = requests.post(MODELS + 'login', request.POST)
+    resp = requests.post(MODELS + 'login/', request.POST)
+    other=resp.text
     return JsonResponse(resp.json())
 
+def logout(request):
+    resp = requests.post(MODELS + 'logout/', request.POST)
+    return JsonResponse(resp.json())
+
+# def login_required(f):
+#     def wrap(request, *args, **kwargs):
+#
+#         # try authenticating the us_validateer
+#         user = authenticateUser(request)
+#
+#
+#         # authentication failed
+#         if not user:
+#             # redirect the user to the login page
+#             return HttpResponseRedirect(reverse('login')+'?next='+current_url)
+#         else:
+#             return f(request, *args, **kwargs)
+#     return wrap
+
+def authenticateUser(request):
+    return JsonResponse(requests.post(MODELS + 'authenticate/', request.POST).json())
