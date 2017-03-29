@@ -124,9 +124,10 @@ def createUser(request):
                 text = struct["results"]
             except:
                 print (repr(resp))
+            text = resp.json()['results']
             if resp.json()['results']:
                 login = requests.post('http://exp-api:8000/v1/api/login/', {'username': form.cleaned_data['username'], 'password': form.cleaned_data['password']})
-            return HttpResponseRedirect('/')
+
 
     return render(request, 'newUser.html', {'form' : form, "text":text})
 
