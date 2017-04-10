@@ -3,6 +3,7 @@ import urllib.request
 import json
 from django.http import HttpResponse, JsonResponse
 import requests
+from kafka import KafkaProducer
 from django.contrib.auth import hashers
 import pdb
 
@@ -31,6 +32,11 @@ def createBuyPost(request):
 
 def createSellPost(request):
         resp = requests.post(MODELS + 'createSellPost/', request.POST)
+        producer = KafkaProducer(bootstrap_servers='kafka:9092')
+        # data = resp.POST.get()
+        # obj = json.loads(data)
+        #new_listing = {'title': resp.POST.get("title", ""), 'isbn': resp.POST.get("isbn",""), 'author': }
+        producer.send(resp.POST.get('title', ""), json.dumps(JsonResponse(resp.json()['data'])).encode('utf-8'))
         return JsonResponse(resp.json())
 
 def createUser(request):

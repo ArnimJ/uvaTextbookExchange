@@ -17,6 +17,7 @@ from django.utils import timezone
 import hmac
 import models.settings as settings
 import os
+from django.core import serializers
 
 
 class TextbookForm(forms.Form):
@@ -358,7 +359,6 @@ def _success_response(request, resp=None):
 
 
 def createBuyPost(request):
-    if request.method == 'POST':
         if request.method == 'POST':
             try:
 
@@ -398,17 +398,9 @@ def createBuyPost(request):
                         "results": "Something was not passed in detail."
                     })
 
-
-                # textbook = None
-                # try:
-                #     textbook = Textbook.objects.get(id=postTextbook)
-                # except:
-                #     return JsonResponse({
-                #         "results": "No textbook with that ID found."
-                #     })
                 textbook = Textbook(
                     title=postTextbookName,
-                    isbn=postTextbookISBN,
+                    isbn=postTextbookISBN, #TODO: if textbook's isbn number already is in database, do not add
                     author=postTextbookAuthor
                 )
                 textbook.save()
@@ -445,16 +437,6 @@ def createSellPost(request):
                 return JsonResponse({
                     "results": "Something was not passed in textbook."
                 })
-
-
-
-
-            # try:
-            #     textbook = Textbook.objects.get(id=postTextbook)
-            # except:
-            #     return JsonResponse({
-            #         "results": "No textbook with that ID found."
-            #     })
 
             postTitle = request.POST.get('title', "")
             postPrice = request.POST.get('price', False)
@@ -499,8 +481,9 @@ def createSellPost(request):
                 type="Sell"
             )
             post.save()
-
-            return JsonResponse({'results': 'Success'})
+            obj = TextbookPost.objects.get(pk=post.pk)
+            serialized_obj = serializers.serialize('json', [obj, ])
+            return JsonResponse({'results': 'Success', 'data':serialized_obj})
 
         except IntegrityError:
             return JsonResponse({'results': 'something went very wrong'})

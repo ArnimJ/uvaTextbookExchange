@@ -32,6 +32,6 @@ urlpatterns = [
 
 
     url(r'^sell/', views.selling, name = 'sell'),
-    url(r'buy/', views.buying),
+    url(r'buy/', views.buying, name= 'buy'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
