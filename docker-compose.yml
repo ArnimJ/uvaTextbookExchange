@@ -1,3 +1,24 @@
+kafka:
+   image: spotify/kafka
+   container_name: kafka
+   environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+   hostname: kafka
+
+es:
+   image: elasticsearch:2.0
+   container_name: es
+   ports:
+      - "9200:9200"
+
+batch:
+   image: tp33/django
+   container_name: batch
+   links:
+      - kafka:kafka
+      - es:es
+
 models:
     container_name: models
     image: tp33/django
@@ -16,6 +37,8 @@ exp:
    image: tp33/django
    links:
       - models:models-api
+      - kafka:kafka
+      - es:es
    ports:
       - "8002:8000"
    volumes:
@@ -32,3 +55,4 @@ web:
    volumes:
       - ./web:/app
    command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
+

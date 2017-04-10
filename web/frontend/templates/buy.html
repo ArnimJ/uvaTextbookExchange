@@ -1,20 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load frontend_extras %}
 {% block body_block %}
-<head>
-    <meta charset="UTF-8">
-    <title>Post Your For Sale or Buying Posts </title>
-</head>
-<body>
-    <form action="/buy/" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
-<div>
-    <p>{{text}}</p>
+
+{#<script>#}
+{#    var json = '{{text}}';#}
+{#    if(json == 'Success'){#}
+{#        document.getElementById("message").innerHTML =#}
+{#                "<div class='alert alert-success'> <strong>Success!</strong></div>";#}
+{#    } else{#}
+{#        document.getElementById("message").innerHTML =#}
+{#                "<div class='alert alert-danger'> <strong></strong></div>";#}
+{#    }#}
+{#</script>#}
+<div class="container">
+    <ol class="breadcrumb" >
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li class="active">Sell</li>
+    </ol>
+    <h1>What Book Are you Looking For?</h1>
+    <body>
+        <form method="post"> {% csrf_token %}
+            <div class = "well">
+                {% for field in form %}
+                    <div class="form-group col-sm-6">
+                        {{ field.errors }}
+                        <label>{{ field.label }}:</label>
+                        <div>
+                            {{ field|CSS:'form-control' }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Submit" class="'btn btn-info"/>
+            </div>
+        </form>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="alert alert-info">
+          <strong>{{ text }}</strong>
+        </div>
+    </body>
 </div>
-</body>
 
 
 
