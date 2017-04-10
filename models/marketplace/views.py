@@ -482,8 +482,8 @@ def createSellPost(request):
             )
             post.save()
             obj = TextbookPost.objects.get(pk=post.pk)
-            serialized_obj = serializers.serialize('json', [obj, ])
-            return JsonResponse({'results': 'Success', 'data':serialized_obj})
+            return_object = model_to_dict(obj)
+            return JsonResponse({'results': 'Success', 'data':return_object})
 
         except IntegrityError:
             return JsonResponse({'results': 'something went very wrong'})

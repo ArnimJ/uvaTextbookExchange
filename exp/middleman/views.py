@@ -31,13 +31,11 @@ def createBuyPost(request):
     return JsonResponse(resp.json())
 
 def createSellPost(request):
-        resp = requests.post(MODELS + 'createSellPost/', request.POST)
-        producer = KafkaProducer(bootstrap_servers='kafka:9092')
-        # data = resp.POST.get()
-        # obj = json.loads(data)
-        #new_listing = {'title': resp.POST.get("title", ""), 'isbn': resp.POST.get("isbn",""), 'author': }
-        producer.send(resp.POST.get('title', ""), json.dumps(JsonResponse(resp.json()['data'])).encode('utf-8'))
-        return JsonResponse(resp.json())
+    resp = requests.post(MODELS + 'createSellPost/', request.POST)
+    producer = KafkaProducer(bootstrap_servers='kafka:9092')
+    #print(resp.json())
+    producer.send(resp.json()['data']['postTitle'], json.dumps(resp.json()['data']).encode('utf-8'))
+    return JsonResponse(resp.json())
 
 def createUser(request):
     resp = requests.post(MODELS + 'createUser/', request.POST)
