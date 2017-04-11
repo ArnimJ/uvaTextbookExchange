@@ -38,7 +38,7 @@ def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST)
     producer = KafkaProducer(bootstrap_servers='kafka:9092')
     #print(resp.json())
-    producer.send(resp.json()['data']['postTitle'], json.dumps(resp.json()['data']).encode('utf-8'))
+    producer.send('new-listing-topic', json.dumps(resp.json()['data']).encode('utf-8'))
     return JsonResponse(resp.json())
 
 def createUser(request):
