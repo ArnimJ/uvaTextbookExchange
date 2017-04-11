@@ -18,6 +18,7 @@ batch:
    links:
       - kafka:kafka
       - es:es
+   command: python batch.py
 
 models:
     container_name: models

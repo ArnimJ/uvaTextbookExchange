@@ -6,6 +6,7 @@ import requests
 from kafka import KafkaProducer
 from django.contrib.auth import hashers
 import pdb
+from elasticsearch import Elasticsearch
 
 MODELS = 'http://models-api:8000/v1/api/'
 
@@ -70,3 +71,14 @@ def logout(request):
 
 def authenticateUser(request):
     return JsonResponse(requests.post(MODELS + 'authenticate/', request.POST).json())
+
+def search_listing(request):
+    es = Elasticsearch(['es'])
+    query = request.POST.get('query', None)
+    results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+    results_list = []
+    for result in results['hits']['hits']:
+        resp = requests.get(MODELS+ 'textbooklistings/?id='+result.id).json()
+        if resp['ok']:
+            results_list.append(resp['results'])
+    return JsonResponse({'ok':True, 'results':results_list})

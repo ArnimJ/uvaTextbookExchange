@@ -48,9 +48,9 @@ def getTextbooks(request):
             try:
                 results = results.get(id=id)
                 results = forms.models.model_to_dict(results)
-                return JsonResponse({'results': results})
+                return JsonResponse({'ok':True, 'results': results})
             except ObjectDoesNotExist:
-                return JsonResponse({'results': "No textbook found"})
+                return JsonResponse({'ok':False,'results': "No textbook found"})
         elif filter:
             results = results.filter(filter)
         else:
@@ -58,7 +58,7 @@ def getTextbooks(request):
         return JsonResponse({'results': results})
 
     else:
-        return JsonResponse({'results': "this is a GET method, you gave " + request.method})
+        return JsonResponse({'ok':False,'results': "this is a GET method, you gave " + request.method})
 
 
 # Delete the textbook as specified by id
@@ -202,16 +202,16 @@ def getTextbookPost(request):
             try:
                 results = results.get(id=id)
                 results = forms.models.model_to_dict(results)
-                return JsonResponse({'results': results})
+                return JsonResponse({'ok':True, 'results': results})
             except ObjectDoesNotExist:
-                return JsonResponse({'results': "No listing found with that ID"})
+                return JsonResponse({'ok':False,'results': "No listing found with that ID"})
         elif filter:
             results = results.filter(filter)
         else:
             results = list(TextbookPost.objects.values())
-        return JsonResponse({'results': results})
+        return JsonResponse({'ok':True,'results': results})
     else:
-        return JsonResponse({'results': "this is a GET method, you gave " + request.method})
+        return JsonResponse({'ok':False,'results': "this is a GET method, you gave " + request.method})
 
 
 def getPopularPosts(request):
