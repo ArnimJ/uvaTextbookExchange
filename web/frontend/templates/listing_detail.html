@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+
+    <div class="container">
+
+        <ol class="breadcrumb" >
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li>Posts</li>
+            <li class="active">{{listing.postTitle}}</li>
+        </ol>
+
+        <div class="col-sm-4">
+            <img class="img-responsive" src="{% static 'img/genericTextbook.png' %}" style="width: 350px; height:400px" alt="">
+        </div>
+        <div class="col-sm-8 right">
+                                    <h1>Title: {{listing.postTitle}} </h1>
+                                    <h2>Textbook Details: </h2>
+                                    <p style="margin-left: 40px; font-size: 22px;" >
+                                        <strong> Title: {{ textbook.title }} </strong> <br/>
+                                        <strong> Author: {{ textbook.author }} </strong> <br/>
+                                        <strong> ISBN: {{ textbook.isbn }}</strong> <br/>
+                                        <strong> Condition: {{ listing.condition }}</strong>
+                                    </p>
+                                    <h2>Price: {{listing.price}}</h2>
+                                    <h2>Sold: {{listing.sold}}</h2>
+                                    <h2>Date Posted: {{listing.postDate}}</h2>
+                                    <h2>Details: {{listing.details}}</h2>
+                                    <h2>Type: {{ listing.type }}</h2>
+        </div>
+
+
+
+    </div>
+
+{% endblock %}
