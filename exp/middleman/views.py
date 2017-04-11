@@ -26,6 +26,10 @@ def getRecentPosts(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     return JsonResponse(json.loads(resp_json))
 
+def getAllTextbookPosts(request): #get all textbooks
+    resp = requests.get(MODELS + 'textbooklistings/', request.GET)
+    return JsonResponse(resp.json())
+
 def createBuyPost(request):
     resp = requests.post(MODELS + 'createBuyPost/', request.POST)
     return JsonResponse(resp.json())

@@ -33,5 +33,7 @@ urlpatterns = [
 
     url(r'^sell/', views.selling, name = 'sell'),
     url(r'buy/', views.buying, name= 'buy'),
+    url(r'^listings/', views.allListings, name='listing'),
+    url(r'^listing_detail/(?P<id>\d+)/$', views.listing_detail, name='listing_detail'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

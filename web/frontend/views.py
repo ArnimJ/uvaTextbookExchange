@@ -165,6 +165,35 @@ def buying(request):
             # return JsonResponse(resp, safe=False)
     return render(request, 'buy.html', {'form': form, 'text': text})
 
+def allListings(request):
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
+    if not auth_check.json()['ok']:
+        return HttpResponseRedirect('/')
+    else:
+        resp = requests.get('http://exp-api:8000/v1/api/allListing/')
+        # allposts = resp.json()['results']
+        # sellPosts = {}
+        # buyPosts = {}
+        # for item in allposts:
+        #     if item['type'] == 'Sell':
+        #         sellPosts.
+    return render(request, 'alllistings.html', {'data':resp.json()['results']})
+
+def listing_detail(request, id):
+    resp = requests.get('http://exp-api:8000/v1/api/allListing/')
+    posts = resp.json()['results']
+    num = int(id) - 1
+    b = posts[num]
+
+    textbook_id = b['textbook_id']
+    resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
+    textobj = resp2.json()['results']
+    num2 = int(textbook_id) - 1
+    book = textobj[num2]
+
+    return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
+
+
 # def register(request):
 #     return render(request, 'register.html')
 
