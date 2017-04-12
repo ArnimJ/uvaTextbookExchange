@@ -18,29 +18,30 @@
                 <li><a href="{% url 'index' %}">Home</a></li>
                 <li class="active">Sell</li>
     </ol>
-    <h1>What Book Are you Looking For?</h1>
     <body>
-        <form method="post"> {% csrf_token %}
-            <div class = "well">
+        <div class="col-lg-12 well">
+            <h1>What Book Are you Looking For?</h1>
+            <form method="post">{% csrf_token %}
                 {% for field in form %}
-                    <div class="form-group col-sm-6">
-                        {{ field.errors }}
-                        <label>{{ field.label }}:</label>
-                        <div>
-                            {{ field|CSS:'form-control' }}
-                        </div>
+                <div class="form-group col-xs-6">
+                    {{ field.errors }}
+                    <label>{{ field.label }}:</label>
+                    <div>
+                        {{ field|CSS:'form-control' }}
                     </div>
+                </div>
                 {% endfor %}
-                <input type="submit" value="Submit" class="'btn btn-info"/>
+                <input type="submit" value="Submit" class="btn btn-info"/>
+            </form>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="alert alert-info">
+                <strong>{{ text }}</strong>
             </div>
-        </form>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div class="alert alert-info">
-          <strong>{{ text }}</strong>
+            <div> <p> {{ data }}</p></div>
         </div>
     </body>
 </div>

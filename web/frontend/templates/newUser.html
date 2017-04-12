@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load frontend_extras %}
 {% block body_block %}
 <head>
     <meta charset="UTF-8">
     <title>Register as a New User</title>
 </head>
 <body>
-    <form action="/register/" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
-
+    <div class="col-lg-12 well">
+        <div style="width:400px; margin:0 auto;">
+            <h2>Register as a New User</h2>
+            <form method="post">{% csrf_token %}
+                    <div class="well">
+                        {% for field in form %}
+                            <div class="form-group col-xs-12">
+                                {{ field.errors }}
+                                <label>{{ field.label }}:</label>
+                                <div>
+                                    {{ field|CSS:'form-control' }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <input type="submit" value="Submit" class="btn btn-info"/>
+                    </div>
+            </form>
+        </div>
+    </div>
 <div>
     <p>{{text}}</p>
 </div>
