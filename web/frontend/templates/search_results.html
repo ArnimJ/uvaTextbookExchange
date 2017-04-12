@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Search Results</title>
-</head>
-<body>
-{{ listings }}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+<div class="container">
+    <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>Search Results</h1>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li class="active">Search</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+    <body>
+        {{ listings }}
+    </body>
+</div>
+{% endblock %}
