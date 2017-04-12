@@ -35,7 +35,7 @@ def index(request):
     allbooks = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
     req1 = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recentPosts = json.loads(urllib.request.urlopen(req1).read().decode('utf-8'))
-    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results']})
+    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
 
 def book_list(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')

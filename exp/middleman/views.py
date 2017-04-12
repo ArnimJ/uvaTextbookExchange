@@ -39,7 +39,7 @@ def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST)
     producer = KafkaProducer(bootstrap_servers='kafka:9092')
     #print(resp.json())
-    producer.send('new-listing-topic', json.dumps(resp.json()['data']).encode('utf-8'))
+    producer.send('new-listings-topic', json.dumps(resp.json()['data']).encode('utf-8'))
     return JsonResponse(resp.json())
 
 def createUser(request):
@@ -78,7 +78,7 @@ def search_listing(request):
     results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     results_list = []
     for result in results['hits']['hits']:
-        resp = requests.get(MODELS+ 'textbooklistings/?id='+result.id).json()
+        resp = requests.get(MODELS+ 'textbooklistings/?id='+result.get('_id')).json()
         if resp['ok']:
             results_list.append(resp['results'])
     return JsonResponse({'ok':True, 'results':results_list})

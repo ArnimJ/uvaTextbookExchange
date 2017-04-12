@@ -61,7 +61,7 @@
 
                     <div class="container">
                         <div class="col-xs-7" >
-                            {{request.user.username}}
+
                             {% if request.user.is_authenticated %}
                             <a href="/logout/"><i class="fa fa-user"></i> <span class="hidden-xs text-uppercase">Log Out</span></a>
                             {% else %}

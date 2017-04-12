@@ -15,10 +15,12 @@ es:
 batch:
    image: tp33/django
    container_name: batch
+   volumes:
+        - .:/app
    links:
       - kafka:kafka
       - es:es
-   command: python batch.py
+   command: bash -c "python batch.py"
 
 models:
     container_name: models
