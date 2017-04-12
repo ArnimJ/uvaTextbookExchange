@@ -7,6 +7,8 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
+from elasticsearch import Elasticsearch
+
 
 from .forms import *
 # from models.marketplace.models import Authenticator
@@ -33,7 +35,7 @@ def index(request):
     allbooks = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
     req1 = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recentPosts = json.loads(urllib.request.urlopen(req1).read().decode('utf-8'))
-    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results']})
+    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
 
 def book_list(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')
@@ -193,10 +195,14 @@ def listing_detail(request, id):
 
     return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
 
-
-# def register(request):
-#     return render(request, 'register.html')
-
+def search_listing(request):
+    if request.method == 'POST':
+        resp = requests.post(exp_endpoint+ 'search_listing/', request.POST).json()
+        if resp.get('ok'):
+            data = {'listings': resp.get('results')}
+        else:
+            data = {}
+        return render(request, 'search_results.html', data)
 
 
 # def request_post(endpoint,data):
