@@ -3,18 +3,27 @@
 {% load static %}
 
     <div class="container">
+        <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>{{book.title}}</h1>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="{% url 'book_list' %}">Buy Books</a></li>
+                            <li class="active">Book Details</li>
+                        </ul>
 
-        <ol class="breadcrumb" >
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'book_list' %}">Buy Books</a></li>
-            <li class="active">{{book.title}}</li>
-        </ol>
-
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-sm-4">
             <img class="img-responsive" src="{% static 'img/book-plain.jpg' %}" style="width: 350px; height:400px" alt="">
         </div>
         <div class="col-sm-8 right">
-                                    <h1>Book Title: {{book.title}} </h1>
                                     <h2>ISBN-13: {{book.isbn}}</h2>
                                     <h2>Author: {{book.author}}</h2>
                                     <h2>Publisher: {{book.publisher}}</h2>

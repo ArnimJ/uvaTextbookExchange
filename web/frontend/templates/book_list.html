@@ -3,13 +3,22 @@
 {% load static %}
 
     <div class="container">
-        <ol class="breadcrumb" >
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li class="active">Buy Books</li>
-        </ol>
+        <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>Books</h1>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li class="active">Buy Books</li>
+                        </ul>
 
-        <h1>Books</h1>
-
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <table id="family_table" class="table table-striped tablesorter">
     <thead>

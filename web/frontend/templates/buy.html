@@ -14,13 +14,25 @@
 {#    }#}
 {#</script>#}
 <div class="container">
-    <ol class="breadcrumb" >
-                <li><a href="{% url 'index' %}">Home</a></li>
-                <li class="active">Sell</li>
-    </ol>
+    <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>Buy a Book!</h1>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li class="active">Buy</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     <body>
         <div class="col-lg-12 well">
-            <h1>What Book Are you Looking For?</h1>
+            <h2>What Book Are you Looking For?</h2>
             <form method="post">{% csrf_token %}
                 {% for field in form %}
                 <div class="form-group col-xs-6">
