@@ -3,30 +3,39 @@
 {% load static %}
 
     <div class="container">
+         <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>{{listing.postTitle}}</h1>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="{% url 'listing' %}">Listings</a></li>
+                            <li class="active">Listing Details</li>
+                        </ul>
 
-        <ol class="breadcrumb" >
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li>Posts</li>
-            <li class="active">{{listing.postTitle}}</li>
-        </ol>
-
+                    </div>
+                </div>
+            </div>
+            </div>
         <div class="col-sm-4">
             <img class="img-responsive" src="{% static 'img/genericTextbook.png' %}" style="width: 350px; height:400px" alt="">
         </div>
         <div class="col-sm-8 right">
-                                    <h1>Title: {{listing.postTitle}} </h1>
-                                    <h2>Textbook Details: </h2>
+                                    <h3>Textbook Details: </h3>
                                     <p style="margin-left: 40px; font-size: 22px;" >
                                         <strong> Title: {{ textbook.title }} </strong> <br/>
                                         <strong> Author: {{ textbook.author }} </strong> <br/>
                                         <strong> ISBN: {{ textbook.isbn }}</strong> <br/>
                                         <strong> Condition: {{ listing.condition }}</strong>
                                     </p>
-                                    <h2>Price: {{listing.price}}</h2>
-                                    <h2>Sold: {{listing.sold}}</h2>
-                                    <h2>Date Posted: {{listing.postDate}}</h2>
-                                    <h2>Details: {{listing.details}}</h2>
-                                    <h2>Type: {{ listing.type }}</h2>
+                                    <h3>Price: {{listing.price}}</h3>
+                                    <h3>Sold: {{listing.sold}}</h3>
+                                    <h3>Date Posted: {{listing.postDate}}</h3>
+                                    <h3>Details: {{listing.details}}</h3>
+                                    <h3>Type: {{ listing.type }}</h3>
         </div>
 
 

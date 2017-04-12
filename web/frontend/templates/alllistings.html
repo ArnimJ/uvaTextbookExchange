@@ -2,69 +2,81 @@
 {% block body_block %}
 {% load static %}
 
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>All Listings</title>
-</head>
 <body>
-    <div>
-        <h1> Textbooks for Sale:</h1>
-        {% for item in data %}
-            {% if item.type == 'Sell' %}
-            <div class="col-md-3 col-sm-4">
-                        <div class="product">
-                            <div class="image">
-                                <a href="{% url 'listing_detail' item.id %}">
-                                    <img src="{% static 'img/genericTextbook.png'%}"  alt="{{ item.postTitle }}" class="img-responsive image1">
-                                </a>
-                            </div>
-                            <div class="text">
-                                <h3><a href="/item/{{ item.id }}"> {{item.postTitle }} </a></h3>
-                                <p class="price">${{ item.price }}</p>
-                                <p class="buttons">
-                                    <a href="/item/{{ item.id }}" class="btn btn-default">View detail</a>
-                                    <a href="cart.html" class="btn btn-template-main"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="ribbon new">
-                            <div class="theribbon">NEW</div>
-                            <div class="ribbon-background"></div>
-                        </div>
+    <div class="container">
+    <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>Current Listings</h1>
                     </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <br/>
-    <div>
+                    <div class="col-md-4">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li class="active">Listings</li>
+                        </ul>
 
-        <h1> Textbooks Wanted: </h1>
-        {% for item in data %}
-            {% if item.type == 'Buying' %}
-            <div class="col-md-3 col-sm-4">
-                        <div class="product">
-                            <div class="image">
-                                <a href="{% url 'listing_detail' item.id %}">
-                                    <img src="{% static 'img/genericTextbook.png'%}"  alt="{{ item.postTitle }}" class="img-responsive image1">
-                                </a>
-                            </div>
-                            <div class="text">
-                                <h3><a href="/item/{{ item.id }}"> {{item.postTitle }} </a></h3>
-                                <p class="price">${{ item.price }}</p>
-                                <p class="buttons">
-                                    <a href="/item/{{ item.id }}" class="btn btn-default">View detail</a>
-                                    <a href="cart.html" class="btn btn-template-main"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="ribbon new">
-                            <div class="theribbon">NEW</div>
-                            <div class="ribbon-background"></div>
-                        </div>
                     </div>
-            {% endif %}
-        {% endfor %}
+                </div>
+            </div>
+    </div>
+        <div class="container">
+            <h1> Textbooks for Sale:</h1>
+            {% for item in data %}
+                {% if item.type == 'Sell' %}
+                <div class="col-md-3 col-sm-4">
+                            <div class="product">
+                                <div class="image">
+                                    <a href="{% url 'listing_detail' item.id %}">
+                                        <img src="{% static 'img/genericTextbook.png'%}"  alt="{{ item.postTitle }}" class="img-responsive image1">
+                                    </a>
+                                </div>
+                                <div class="text">
+                                    <h3><a href="/item/{{ item.id }}"> {{item.postTitle }} </a></h3>
+                                    <p class="price">${{ item.price }}</p>
+                                    <p class="buttons">
+                                        <a href="/item/{{ item.id }}" class="btn btn-default">View detail</a>
+                                        <a href="cart.html" class="btn btn-template-main"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ribbon new">
+                                <div class="theribbon">NEW</div>
+                                <div class="ribbon-background"></div>
+                            </div>
+                        </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="container">
+
+            <h1> Textbooks Wanted: </h1>
+            {% for item in data %}
+                {% if item.type == 'Buying' %}
+                <div class="col-md-3 col-sm-4">
+                            <div class="product">
+                                <div class="image">
+                                    <a href="{% url 'listing_detail' item.id %}">
+                                        <img src="{% static 'img/genericTextbook.png'%}"  alt="{{ item.postTitle }}" class="img-responsive image1">
+                                    </a>
+                                </div>
+                                <div class="text">
+                                    <h3><a href="/item/{{ item.id }}"> {{item.postTitle }} </a></h3>
+                                    <p class="price">${{ item.price }}</p>
+                                    <p class="buttons">
+                                        <a href="/item/{{ item.id }}" class="btn btn-default">View detail</a>
+                                        <a href="cart.html" class="btn btn-template-main"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ribbon new">
+                                <div class="theribbon">NEW</div>
+                                <div class="ribbon-background"></div>
+                            </div>
+                        </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </body>
 
