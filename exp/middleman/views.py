@@ -38,10 +38,12 @@ def createBuyPost(request):
 def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST).json()
     producer = KafkaProducer(bootstrap_servers='kafka:9092')
+    print(resp)
     #put a dictionary of the textbook info in the post info in place of the id so that it is indexed too
-    resp['data']['textbook'] = requests.post(MODELS + 'textbooks/?id='+resp['data']['textbook']).json().get('results')
+    resp['data']['textbook'] = requests.get(MODELS + 'textbooks/?id='+repr(resp['data']['textbook'])).json().get('results')
+    print(resp)
     producer.send('new-listings-topic', json.dumps(resp['data']).encode('utf-8'))
-    return JsonResponse(resp.json())
+    return JsonResponse(resp)
 
 def createUser(request):
     resp = requests.post(MODELS + 'createUser/', request.POST)
@@ -78,7 +80,7 @@ def search_listing(request):
     query = request.POST.get('query', None)
     results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     results_list = []
-    for result in results['hits']['hits']:
+    for result in results['hits']['hits']:#probably change this to just use the result so we don't have to hit the db
         resp = requests.get(MODELS+ 'textbooklistings/?id='+result.get('_id')).json()
         if resp['ok']:
             results_list.append(resp['results'])
