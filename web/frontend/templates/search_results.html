@@ -19,7 +19,32 @@
             </div>
     </div>
     <body>
-        {{ listings }}
+        <table id="post_table" class="table table-striped tablesorter">
+            <thead>
+                <tr>
+                    <th>Post Title </th>
+                    <th>Textbook</th>
+                    <th>Condition</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Sold</th>
+                    <th>Times Viewed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in listings %}
+                    <tr>
+                        <td>{{ post.postTitle }}</td>
+                        <td><a href="{% url 'book_detail' post.textbook.id %}">{{ post.textbook.title }}</a></td>
+                        <td>{{ post.condition }}</td>
+                        <td>{{ post.price }}</td>
+                        <td>{{ post.category }}</td>
+                        <td>{{ post.sold }}
+                        <td>{{ post.viewCount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </div>
 {% endblock %}

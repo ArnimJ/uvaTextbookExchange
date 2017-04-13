@@ -79,7 +79,7 @@ def search_listing(request):
     results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     results_list = []
     for result in results['hits']['hits']:#probably change this to just use the result so we don't have to hit the db
-        resp = requests.get(MODELS+ 'textbooklistings/?id='+result.get('_id')).json()
-        if resp['ok']:
-            results_list.append(resp['results'])
+        # resp = requests.get(MODELS+ 'textbooklistings/?id='+result.get('_id')).json()
+        # if resp['ok']:
+        results_list.append(result['_source'])
     return JsonResponse({'ok':True, 'results':results_list})
