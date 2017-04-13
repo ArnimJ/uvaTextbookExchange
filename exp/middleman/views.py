@@ -38,10 +38,8 @@ def createBuyPost(request):
 def createSellPost(request):
     resp = requests.post(MODELS + 'createSellPost/', request.POST).json()
     producer = KafkaProducer(bootstrap_servers='kafka:9092')
-    print(resp)
     #put a dictionary of the textbook info in the post info in place of the id so that it is indexed too
     resp['data']['textbook'] = requests.get(MODELS + 'textbooks/?id='+repr(resp['data']['textbook'])).json().get('results')
-    print(resp)
     producer.send('new-listings-topic', json.dumps(resp['data']).encode('utf-8'))
     return JsonResponse(resp)
 

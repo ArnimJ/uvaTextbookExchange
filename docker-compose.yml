@@ -46,7 +46,7 @@ exp:
       - "8002:8000"
    volumes:
       - ./exp:/app
-   command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./exp/wsgi.py"
+   command: bash -c "pip install requests && python setup.py && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./exp/wsgi.py"
 
 web:
    container_name: web
