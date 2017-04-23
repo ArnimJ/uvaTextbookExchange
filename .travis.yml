@@ -19,7 +19,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - sudo mkdir -p ~/cs4501/db
 
-intall:
+install:
   - docker pull mysql:5.7.17
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash
