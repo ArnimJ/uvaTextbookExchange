@@ -1,3 +1,14 @@
+haproxy:
+    build: ./haproxy
+    container_name: haproxy
+    volumes:
+       - ./haproxy:/app
+    ports:
+       - "8000:8000"
+    links:
+       - web1:web1
+       - web2:web2
+
 kafka:
    image: spotify/kafka
    container_name: kafka
@@ -48,14 +59,24 @@ exp:
       - ./exp:/app
    command: bash -c "pip install requests && python setup.py && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./exp/wsgi.py"
 
-web:
-   container_name: web
+web1:
+   container_name: web1
    image: tp33/django
    links:
       - exp:exp-api
    ports:
-      - "8000:8000"
+      - "8003:8000"
    volumes:
       - ./web:/app
    command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
 
+web2:
+   container_name: web2
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8004:8000"
+   volumes:
+      - ./web:/app
+   command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"

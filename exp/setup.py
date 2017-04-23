@@ -1,8 +1,12 @@
 from django.forms.models import model_to_dict
 import requests
 from elasticsearch import Elasticsearch
+import os,sys
+
 
 MODELS = 'http://models-api:8000/v1/api/'
+
+sys.stderr = open(os.devnull, 'a')
 
 while(True):
     resp = requests.get(MODELS + 'textbooklistings/').json()
