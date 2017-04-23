@@ -17,7 +17,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - mkdir ~/cs4501/db
+  - sudo mkdir -p ~/cs4501/db
 
 intall:
   - docker pull mysql:5.7.17
