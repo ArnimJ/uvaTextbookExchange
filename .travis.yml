@@ -1,0 +1,31 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+
+sudo: required
+
+services:
+  - docker
+
+env:
+    DOCKER_COMPOSE_VERSION: 1.11.2
+
+before_install:
+  - sudo apt-get update
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - sudo mkdir -p ~/cs4501/db
+
+install:
+  - docker pull mysql:5.7.14
+  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
+  - docker ps
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash
+  - ls
+
+script:
+  - docker ps
+  - docker-compose up -d

@@ -26,7 +26,7 @@ urlpatterns = [
     #API urls
 
     #textbook apis
-    url(r'^v1/api/textbooks/', views.getTextbooks, name="allTextbooks"),     #read
+    url(r'^v1/api/textbooks/$', views.getTextbooks, name="allTextbooks"),     #read
     url(r'^v1/api/textbooks/delete/', views.deleteTextbook, name="deleteBook"), #delete
     url(r'^v1/api/textbooks/create/', views.createTextbook, name="createTextbook"), #create
     url(r'^v1/api/textbooks/updateTextbook/', views.updateTextbook, name="updateTextbook"), #update
