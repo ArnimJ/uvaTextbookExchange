@@ -164,7 +164,8 @@ class UpdateTextbookTextcases(TestCase):
         response = self.client.post(reverse('updateTextbook'), {'id':1 , 'title': 'newTitle'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
-        self.assertEquals(value['id'],1)
+        print(value['id'])
+        self.assertEquals(value['id'], 1)
 
     def test_update_title(self): ##updating just one field works
         response = self.client.post(reverse('updateTextbook'), {'id':1 , 'title': 'newTitle'})
@@ -272,6 +273,7 @@ class TestGetRecentPosts(TestCase):
     #tearDown method is called after each test
     def tearDown(self):
         pass  # nothing to tear down
+
 #NEW TESTS START HERE
 class TestCreateSellPost(TestCase):
     fixtures = ["db.json"]
@@ -280,46 +282,46 @@ class TestCreateSellPost(TestCase):
         pass
 
     def test_success_response(self): #test a successful post
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Success')
 
     def test_no_textbook_title_given(self): #test case only textbook title isn't given
-        response = self.client.post(reverse('createSellPost'), {'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Something was not passed in textbook.')
 
     def test_no_author_given(self): #test case only author isn't given
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'title': 'posttitle', 'price': 3, 'condition': 'Good', 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Something was not passed in textbook.')
 
     def test_no_post_title_given(self): #test case only posttitle isn't given
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'price': 3, 'condition': 'Good', 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'price': 3, 'condition': 'Good', 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Something was not passed in posttitle.')
 
     def test_no_post_price_given(self): #test case only posttitle isn't given
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'condition': 'Good', 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'condition': 'Good', 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Something was not passed in price.')
 
     def test_no_post_condition_response(self): #test a post with no condition
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'details': 'blah'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'details': 'blah'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
         self.assertEquals(value, 'Something was not passed in condition.')
 
     def test_no_post_detail_response(self): #test a post with no detail
-        response = self.client.post(reverse('createSellPost'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good'})
+        response = self.client.post(reverse('createSell'), {'textbookName': 'test', 'isbn': 123456789013, 'author': 'me', 'title': 'posttitle', 'price': 3, 'condition': 'Good'})
         response_dict = json.loads(response.content.decode('utf-8'))
         value = response_dict['results']
-        self.assertEquals(value, 'Something was not passed in detail.')
+        self.assertEquals(value, 'something went very wrong')
 
 class TestCreateUser(TestCase):
     fixtures = ["db.json"]
