@@ -23,7 +23,7 @@ install:
   - docker pull mysql:5.7.14
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
   - docker ps
-  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash -c "ls"
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash -c "ps aux"
 
 script:
   - docker ps
