@@ -33,4 +33,6 @@ install:
 script:
   - docker-compose up -d
   - docker start models
+  - >
+    docker exec -it models bash -c "python manage.py test marketplace/"
   - docker ps
