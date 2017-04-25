@@ -22,12 +22,14 @@
             </div>
         <div class="col-sm-4">
             <img class="img-responsive" src="{% static 'img/book-plain.jpg' %}" style="width: 350px; height:400px" alt="">
+            <br>
         </div>
-        <div class="col-sm-8 right">
-                                    <h2>ISBN-13: {{book.isbn}}</h2>
-                                    <h2>Author: {{book.author}}</h2>
-                                    <h2>Publisher: {{book.publisher}}</h2>
-                                    <h2>Publication Date: {{book.publicationDate}}</h2>
+        <div class="box-simple">
+            <u><h2>Book Info</h2></u>
+                                    <h3>ISBN-13: {{book.isbn}}</h3>
+                                    <h3>Author: {{book.author}}</h3>
+                                    <h3>Publisher: {{book.publisher}}</h3>
+                                    <h3>Publication Date: {{book.publicationDate}}</h3>
         </div>
 
 
