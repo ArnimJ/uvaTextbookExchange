@@ -21,6 +21,9 @@
         </div>
     <body>
             <h2>Create a Post</h2>
+            {% if posted %}
+            <div class="alert alert-success" role="alert">You have successfully created an post!</div>
+            {% else %}
             <form method="post">{% csrf_token %}
                 {% for field in form %}
                 <div class="form-group col-xs-6">
@@ -33,15 +36,12 @@
                 {% endfor %}
                 <input type="submit" value="Submit" class="btn btn-info"/>
             </form>
+            {% endif %}
             <br/>
             <br/>
             <br/>
             <br/>
             <br/>
-            <div class="alert alert-info">
-                <strong>{{ text }}</strong>
-            </div>
-            <div> <p> {{ data }}</p></div>
     </body>
 </div>
 {% endblock %}

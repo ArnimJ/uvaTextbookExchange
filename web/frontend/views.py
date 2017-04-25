@@ -141,13 +141,14 @@ def selling(request):
     if request.method == 'GET':
         form = SellingForm()
         text = " "
+        return render(request, 'sell.html', {'form': form, 'text': text, 'posted': False})
     else:
         form = SellingForm(request.POST)
         if form.is_valid():
             resp = requests.post('http://exp-api:8000/v1/api/createSellPost/', form.cleaned_data)
             text = resp.json()["results"]
             # return JsonResponse(resp, safe=False)
-    return render(request, 'sell.html', {'form': form, 'text': text})
+        return render(request, 'sell.html', {'form': form, 'text': text, 'posted': True})
 
 def buying(request):
     auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)

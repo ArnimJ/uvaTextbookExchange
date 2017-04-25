@@ -20,7 +20,7 @@
         <div style="width:400px; margin:0 auto;">
             <h2>Create New Account:</h2>
             {% if registered %}
-            <div class="alert alert-success" role="alert">You have successfully created an account</div>
+            <div class="alert alert-success" role="alert">You have successfully created an account!</div>
             {% else %}
             <form method="post">{% csrf_token %}
                     <div class="well">
