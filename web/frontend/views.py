@@ -114,6 +114,7 @@ def createUser(request):
     text = " "
     if request.method == 'GET':
         form = SignupForm()
+        return render(request, 'newUser.html', {'form': form, "text": text, "registered": False})
 
     else:
         form = SignupForm(request.POST)
@@ -129,9 +130,7 @@ def createUser(request):
             text = resp.json()['results']
             if resp.json()['results']:
                 login = requests.post('http://exp-api:8000/v1/api/login/', {'username': form.cleaned_data['username'], 'password': form.cleaned_data['password']})
-
-
-    return render(request, 'newUser.html', {'form' : form, "text":text})
+        return render(request, 'newUser.html', {'form' : form, "text":text, "registered": True})
 
 
 def selling(request):
