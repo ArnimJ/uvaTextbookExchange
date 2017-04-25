@@ -31,7 +31,7 @@
             </div>
         </div>
     <body>
-            <h2>What Book Are you Looking For?</h2>
+            <h2>What Book Are You Looking For?</h2>
             {% if posted %}
             <div class="alert alert-success" role="alert">You have successfully created a post!</div>
             <a href="{% url 'buy' %}"><font color="blue">Want to create another post?</font></a>
@@ -46,11 +46,9 @@
                     </div>
                 </div>
                 {% endfor %}
-                <input type="submit" value="Submit" class="btn btn-info" />
+                <input type="submit" value="Submit" class="btn btn-info"/>
             </form>
             {% endif %}
-            <br/>
-            <br/>
             <br/>
             <br/>
             <br/>
