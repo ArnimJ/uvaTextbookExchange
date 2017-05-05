@@ -8,27 +8,14 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
 from elasticsearch import Elasticsearch
-
-
 from .forms import *
 # from models.marketplace.models import Authenticator
+
+currentUser = ""
 
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
 def index(request):
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
-    #popular = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
-    #recent = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
-    #allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-
-    #context = {
-    #    'popular' : popular['results'],
-    #    'recent' : recent['results'],
-    #    'allbooks' : allbooks['results']
-    #}
-    #return HttpResponse(template.render(context, request)
     req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
     allposts = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     req2 = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
@@ -99,6 +86,7 @@ def login(request):
     # Set their login cookie and redirect to back to wherever they came from
     resp = resp.json()
     authenticator = resp['resp']['authenticator']
+    currentUser = username
 
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
@@ -108,6 +96,7 @@ def login(request):
 def logout(request):
     if 'auth' in request.COOKIES:
         resp = requests.post('http://exp-api:8000/v1/api/logout/', request.COOKIES)
+        currentUser = ""
     return HttpResponseRedirect('/')
 
 def createUser(request):
@@ -193,6 +182,8 @@ def listing_detail(request, id):
     textobj = resp2.json()['results']
     num2 = int(textbook_id) - 1
     book = textobj[num2]
+
+    resp3 = request.post('http://exp-api:8000/v1/api/addtolog', {'username': currentUser, 'item_id': id})
 
     return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
 

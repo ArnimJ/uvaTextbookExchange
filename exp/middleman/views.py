@@ -83,3 +83,11 @@ def search_listing(request):
         # if resp['ok']:
         results_list.append(result['_source'])
     return JsonResponse({'ok':True, 'results':results_list})
+
+def addtolog(request):
+    username = request['username']
+    id = request['item_id']
+    producer = KafkaProducer(bootstrap_servers='kafka:9092')
+    addView = {'username': username, 'item_id':id}
+    producer.send('new-page-view', json.dumps(addView).encode('utf-8'))
+    return JsonResponse({'results': 'item view added to kafka'})
