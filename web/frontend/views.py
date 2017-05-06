@@ -15,13 +15,17 @@ from .forms import *
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
 def index(request):
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if(auth_check['ok']):
+        user = auth_check['resp']
+    else: user = None
     req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
     allposts = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     req2 = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
     allbooks = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
     req1 = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recentPosts = json.loads(urllib.request.urlopen(req1).read().decode('utf-8'))
-    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
+    return render(request, 'index.html', {'user': user, 'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
 
 def book_list(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')
@@ -45,7 +49,7 @@ def login(request):
     if request.method == 'GET':
         # display the login form page
         next = request.GET.get('next') or reverse('index')
-        return render(request, 'login.html', {'form':form})
+        return render(request, 'login.html', {'form':form, 'login':True})
 
     # Creates a new instance of our login_form and gives it our POST data
     f = LoginForm(request.POST)
@@ -194,11 +198,15 @@ def listing_detail(request, id):
 
 def search_listing(request):
     if request.method == 'POST':
+        auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+        if(auth_check['ok']):
+            user = auth_check['resp']
+        else: user = None
         resp = requests.post(exp_endpoint+ 'search_listing/', request.POST).json()
+        data = {'user':user}
         if resp.get('ok'):
-            data = {'listings': resp.get('results')}
-        else:
-            data = {}
+            data['listings'] = resp.get('results')
+
         return render(request, 'search_results.html', data)
 
 
