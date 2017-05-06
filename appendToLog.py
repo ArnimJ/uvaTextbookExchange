@@ -15,8 +15,8 @@ for message in consumer:
     print(json.loads((message.value).decode('utf-8')))
 
     #append username item_id to end of log file here
-    f = open("pageView.txt", "a+")
-    f.write(view['username'] + " " + view['item_id'])
+    f = open("spark/pageView.txt", "a+")
+    f.write(view['username'] + "\t" + view['item_id'])
     f.close()
 
     # my_file = Path("/uvaTextbookExchange/pageView.txt")
