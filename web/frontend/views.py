@@ -11,7 +11,7 @@ from elasticsearch import Elasticsearch
 from .forms import *
 # from models.marketplace.models import Authenticator
 
-currentUser = ""
+currentUser = "arnim"
 
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
@@ -86,8 +86,9 @@ def login(request):
     # Set their login cookie and redirect to back to wherever they came from
     resp = resp.json()
     authenticator = resp['resp']['authenticator']
+    global currentUser
     currentUser = username
-
+    print(currentUser + "<-----look over here")
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
 
@@ -183,7 +184,9 @@ def listing_detail(request, id):
     num2 = int(textbook_id) - 1
     book = textobj[num2]
 
-    resp3 = request.post('http://exp-api:8000/v1/api/addtolog', {'username': currentUser, 'item_id': id})
+    #send page view to exp to be added to log file
+    print(currentUser + " <-------look here part 2")
+    resp3 = requests.post('http://exp-api:8000/v1/api/addtolog/', {'username': currentUser, 'item_id': id})
 
     return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
 

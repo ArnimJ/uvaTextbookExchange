@@ -85,8 +85,9 @@ def search_listing(request):
     return JsonResponse({'ok':True, 'results':results_list})
 
 def addtolog(request):
-    username = request['username']
-    id = request['item_id']
+    username = request.POST.get('username', False)
+    id = request.POST.get('item_id', False)
+    print(username + " " + id)
     producer = KafkaProducer(bootstrap_servers='kafka:9092')
     addView = {'username': username, 'item_id':id}
     producer.send('new-page-view', json.dumps(addView).encode('utf-8'))

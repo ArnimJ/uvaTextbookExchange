@@ -1,5 +1,7 @@
 from kafka import KafkaConsumer
+import logging
 import json
+from pathlib import Path
 
 while(True):
     try:
@@ -8,5 +10,16 @@ while(True):
         pass
 
 for message in consumer:
-    listing = json.loads((message.value).decode('utf-8'))
+    view = json.loads((message.value).decode('utf-8'))
+    print(json.loads((message.value).decode('utf-8')))
+
     #append username item_id to end of log file here
+    f = open("pageView.txt", "a")
+    f.write(view['username'] + " " + view['item_id'])
+
+
+    # my_file = Path("/uvaTextbookExchange/pageView.txt")
+    # if my_file.is_file():
+    #     #append kafka message to log file
+    #     with open("pageView.txt", "a") as myfile:
+    #         myfile.write(view['username'] + " " + view['item_id'])
