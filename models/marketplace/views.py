@@ -300,7 +300,7 @@ def authenticateUser(request):
         try:  # tests if the user has an authenticator that matches the one the database has for them and is not expired
             auth = Authenticator.objects.get(authenticator=request.POST.get('auth'))
             if (auth.date_created > timezone.now() - timedelta(days=1)):
-                return _success_response(model_to_dict(auth.user_id))
+                return _success_response(request, model_to_dict(auth.user_id))
         except Authenticator.DoesNotExist:
             pass
         return _error_response(request, 'failure')

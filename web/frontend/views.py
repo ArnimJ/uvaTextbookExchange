@@ -11,7 +11,6 @@ from elasticsearch import Elasticsearch
 from .forms import *
 # from models.marketplace.models import Authenticator
 
-currentUser = "arnim"
 
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
@@ -120,10 +119,11 @@ def createUser(request):
 
 
 def selling(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
         return HttpResponseRedirect('/login/')
 
+    user=auth_check['resp']
     if request.method == 'GET':
         form = SellingForm()
         text = " "
@@ -134,31 +134,33 @@ def selling(request):
             resp = requests.post('http://exp-api:8000/v1/api/createSellPost/', form.cleaned_data)
             text = resp.json()["results"]
             # return JsonResponse(resp, safe=False)
-        return render(request, 'sell.html', {'form': form, 'text': text, 'posted': True})
+        return render(request, 'sell.html', {'user':user, 'form': form, 'text': text, 'posted': True})
 
 def buying(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
         return HttpResponseRedirect('/login/')
-
-    if request.method == 'GET':
-        form = BuyingForm()
-        text = " "
-        return render(request, 'buy.html', {'form': form, 'text': text, 'posted': False})
     else:
-        form = SellingForm(request.POST)
-        if form.is_valid():
-            resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
-            text = resp.json()["results"]
-            return render(request, 'buy.html', {'form': form, 'text': text, 'posted': True})
+        user = auth_check['resp']
+        if request.method == 'GET':
+            form = BuyingForm()
+            text = " "
+            return render(request, 'buy.html', {'form': form, 'text': text, 'posted': False})
+        else:
+            form = SellingForm(request.POST)
+            if form.is_valid():
+                resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
+                text = resp.json()["results"]
+                return render(request, 'buy.html', {'form': form, 'text': text, 'posted': True, 'user':user})
 
             # return JsonResponse(resp, safe=False)
 
 def allListings(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
         return HttpResponseRedirect('/login/')
     else:
+        user = auth_check['resp']
         resp = requests.get('http://exp-api:8000/v1/api/allListing/')
         # allposts = resp.json()['results']
         # sellPosts = {}
@@ -166,14 +168,14 @@ def allListings(request):
         # for item in allposts:
         #     if item['type'] == 'Sell':
         #         sellPosts.
-    return render(request, 'alllistings.html', {'data':resp.json()['results']})
+    return render(request, 'alllistings.html', {'data':resp.json()['results'], 'user':user})
 
 def listing_detail(request, id):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
         return HttpResponseRedirect('/login/')
     else:
-        user = auth_check.json()['resp']
+        user = auth_check['resp']
         resp = requests.get('http://exp-api:8000/v1/api/allListing/')
         posts = resp.json()['results']
         num = int(id) - 1
