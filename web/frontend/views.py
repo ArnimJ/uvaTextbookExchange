@@ -8,34 +8,24 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy, reverse
 from elasticsearch import Elasticsearch
-
-
 from .forms import *
 # from models.marketplace.models import Authenticator
+
 
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
 def index(request):
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
-    #popular = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
-    #recent = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-    #req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
-    #allbooks = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
-
-    #context = {
-    #    'popular' : popular['results'],
-    #    'recent' : recent['results'],
-    #    'allbooks' : allbooks['results']
-    #}
-    #return HttpResponse(template.render(context, request)
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if(auth_check['ok']):
+        user = auth_check['resp']
+    else: user = None
     req = urllib.request.Request('http://exp-api:8000/v1/api/popularListings/')
     allposts = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
     req2 = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/')
     allbooks = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
     req1 = urllib.request.Request('http://exp-api:8000/v1/api/recentListings/')
     recentPosts = json.loads(urllib.request.urlopen(req1).read().decode('utf-8'))
-    return render(request, 'index.html', {'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
+    return render(request, 'index.html', {'user': user, 'postings_list': allposts['results'], 'book_list' : allbooks['results'], 'recentposts': recentPosts['results'], 'request':request})
 
 def book_list(request):
     req = urllib.request.Request('http://exp-api:8000/v1/api/textbooks/?')
@@ -59,7 +49,7 @@ def login(request):
     if request.method == 'GET':
         # display the login form page
         next = request.GET.get('next') or reverse('index')
-        return render(request, 'login.html', {'form':form})
+        return render(request, 'login.html', {'form':form, 'login':True})
 
     # Creates a new instance of our login_form and gives it our POST data
     f = LoginForm(request.POST)
@@ -99,7 +89,6 @@ def login(request):
     # Set their login cookie and redirect to back to wherever they came from
     resp = resp.json()
     authenticator = resp['resp']['authenticator']
-
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
 
@@ -134,10 +123,11 @@ def createUser(request):
 
 
 def selling(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
+        return HttpResponseRedirect('/login/')
 
+    user=auth_check['resp']
     if request.method == 'GET':
         form = SellingForm()
         text = " "
@@ -148,31 +138,33 @@ def selling(request):
             resp = requests.post('http://exp-api:8000/v1/api/createSellPost/', form.cleaned_data)
             text = resp.json()["results"]
             # return JsonResponse(resp, safe=False)
-        return render(request, 'sell.html', {'form': form, 'text': text, 'posted': True})
+        return render(request, 'sell.html', {'user':user, 'form': form, 'text': text, 'posted': True})
 
 def buying(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
-
-    if request.method == 'GET':
-        form = BuyingForm()
-        text = " "
-        return render(request, 'buy.html', {'form': form, 'text': text, 'posted': False})
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
+        return HttpResponseRedirect('/login/')
     else:
-        form = SellingForm(request.POST)
-        if form.is_valid():
-            resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
-            text = resp.json()["results"]
-            return render(request, 'buy.html', {'form': form, 'text': text, 'posted': True})
+        user = auth_check['resp']
+        if request.method == 'GET':
+            form = BuyingForm()
+            text = " "
+            return render(request, 'buy.html', {'form': form, 'text': text, 'posted': False})
+        else:
+            form = SellingForm(request.POST)
+            if form.is_valid():
+                resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
+                text = resp.json()["results"]
+                return render(request, 'buy.html', {'form': form, 'text': text, 'posted': True, 'user':user})
 
             # return JsonResponse(resp, safe=False)
 
 def allListings(request):
-    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
-    if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
+        return HttpResponseRedirect('/login/')
     else:
+        user = auth_check['resp']
         resp = requests.get('http://exp-api:8000/v1/api/allListing/')
         # allposts = resp.json()['results']
         # sellPosts = {}
@@ -180,29 +172,41 @@ def allListings(request):
         # for item in allposts:
         #     if item['type'] == 'Sell':
         #         sellPosts.
-    return render(request, 'alllistings.html', {'data':resp.json()['results']})
+    return render(request, 'alllistings.html', {'data':resp.json()['results'], 'user':user})
 
 def listing_detail(request, id):
-    resp = requests.get('http://exp-api:8000/v1/api/allListing/')
-    posts = resp.json()['results']
-    num = int(id) - 1
-    b = posts[num]
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+    if not auth_check['ok']:
+        return HttpResponseRedirect('/login/')
+    else:
+        user = auth_check['resp']
+        resp = requests.get('http://exp-api:8000/v1/api/allListing/')
+        posts = resp.json()['results']
+        num = int(id) - 1
+        b = posts[num]
 
-    textbook_id = b['textbook_id']
-    resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
-    textobj = resp2.json()['results']
-    num2 = int(textbook_id) - 1
-    book = textobj[num2]
+        textbook_id = b['textbook_id']
+        resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
+        textobj = resp2.json()['results']
+        num2 = int(textbook_id) - 1
+        book = textobj[num2]
 
-    return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
+        #send page view to exp to be added to log file
+        resp3 = requests.post('http://exp-api:8000/v1/api/addtolog/', {'username': user['username'], 'item_id': id})
+
+        return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book, 'user': user})
 
 def search_listing(request):
     if request.method == 'POST':
+        auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES).json()
+        if(auth_check['ok']):
+            user = auth_check['resp']
+        else: user = None
         resp = requests.post(exp_endpoint+ 'search_listing/', request.POST).json()
+        data = {'user':user}
         if resp.get('ok'):
-            data = {'listings': resp.get('results')}
-        else:
-            data = {}
+            data['listings'] = resp.get('results')
+
         return render(request, 'search_results.html', data)
 
 

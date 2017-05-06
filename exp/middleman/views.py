@@ -78,8 +78,15 @@ def search_listing(request):
     query = request.POST.get('query', None)
     results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     results_list = []
-    for result in results['hits']['hits']:#probably change this to just use the result so we don't have to hit the db
-        # resp = requests.get(MODELS+ 'textbooklistings/?id='+result.get('_id')).json()
-        # if resp['ok']:
+    for result in results['hits']['hits']:
         results_list.append(result['_source'])
     return JsonResponse({'ok':True, 'results':results_list})
+
+def addtolog(request):
+    username = request.POST.get('username', False)
+    id = request.POST.get('item_id', False)
+    print(username + "  " + id)
+    producer = KafkaProducer(bootstrap_servers='kafka:9092')
+    addView = {'username': username, 'item_id':id}
+    producer.send('new-page-view', json.dumps(addView).encode('utf-8'))
+    return JsonResponse({'results': 'item view added to kafka'})
