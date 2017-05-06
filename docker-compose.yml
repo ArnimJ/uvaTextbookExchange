@@ -78,7 +78,17 @@ batch:
    links:
       - kafka:kafka
       - es:es
-   command: bash -c "python batch.py && python appendToLog.py"
+   command: bash -c "python batch.py"
+
+viewtracker:
+   image: tp33/django
+   container_name: viewtracker
+   volumes:
+        - .:/app
+   links:
+      - kafka:kafka
+      - es:es
+   command: bash -c "python appendToLog.py"
 
 models:
     container_name: models
