@@ -86,9 +86,6 @@ def login(request):
     # Set their login cookie and redirect to back to wherever they came from
     resp = resp.json()
     authenticator = resp['resp']['authenticator']
-    global currentUser
-    currentUser = username
-    print(currentUser + "<-----look over here")
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
 
@@ -97,7 +94,6 @@ def login(request):
 def logout(request):
     if 'auth' in request.COOKIES:
         resp = requests.post('http://exp-api:8000/v1/api/logout/', request.COOKIES)
-        currentUser = ""
     return HttpResponseRedirect('/')
 
 def createUser(request):
@@ -126,7 +122,7 @@ def createUser(request):
 def selling(request):
     auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
     if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/login/')
 
     if request.method == 'GET':
         form = SellingForm()
@@ -143,7 +139,7 @@ def selling(request):
 def buying(request):
     auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
     if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/login/')
 
     if request.method == 'GET':
         form = BuyingForm()
@@ -161,7 +157,7 @@ def buying(request):
 def allListings(request):
     auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
     if not auth_check.json()['ok']:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/login/')
     else:
         resp = requests.get('http://exp-api:8000/v1/api/allListing/')
         # allposts = resp.json()['results']
@@ -173,22 +169,26 @@ def allListings(request):
     return render(request, 'alllistings.html', {'data':resp.json()['results']})
 
 def listing_detail(request, id):
-    resp = requests.get('http://exp-api:8000/v1/api/allListing/')
-    posts = resp.json()['results']
-    num = int(id) - 1
-    b = posts[num]
+    auth_check = requests.post('http://exp-api:8000/v1/api/authenticate/', request.COOKIES)
+    if not auth_check.json()['ok']:
+        return HttpResponseRedirect('/login/')
+    else:
+        user = auth_check.json()['resp']
+        resp = requests.get('http://exp-api:8000/v1/api/allListing/')
+        posts = resp.json()['results']
+        num = int(id) - 1
+        b = posts[num]
 
-    textbook_id = b['textbook_id']
-    resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
-    textobj = resp2.json()['results']
-    num2 = int(textbook_id) - 1
-    book = textobj[num2]
+        textbook_id = b['textbook_id']
+        resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
+        textobj = resp2.json()['results']
+        num2 = int(textbook_id) - 1
+        book = textobj[num2]
 
-    #send page view to exp to be added to log file
-    print(currentUser + " <-------look here part 2")
-    resp3 = requests.post('http://exp-api:8000/v1/api/addtolog/', {'username': currentUser, 'item_id': id})
+        #send page view to exp to be added to log file
+        resp3 = requests.post('http://exp-api:8000/v1/api/addtolog/', {'username': user['username'], 'item_id': id})
 
-    return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book})
+        return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book, 'user': user})
 
 def search_listing(request):
     if request.method == 'POST':
