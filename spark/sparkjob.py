@@ -14,9 +14,9 @@ pairs = data.map(lambda line: tuple(line.split("\t")))   # tell each worker to s
 pairs = pairs.distinct()
 
 #group username to post ids (arnim, <1,2,3>)
-
 viewsperuser = pairs.groupByKey()
-
+#sort lists of page views so that we don't have (10,12) and (12,10) be different tuples
+viewsperuser = viewsperuser.map(lambda x: (x[0], sorted(x[1])))
 
 usertotuple = viewsperuser.flatMap(lambda p: [(p[0], tups) for tups in combs(p[1])])
 
@@ -43,6 +43,11 @@ print("----------------done---------------")
 
 step5 = viewtouser.map(lambda p: (p[0],len(p[1])))
 output = step5.collect()
+for pair, num in output:
+    print("(" + str(pair) + " : " + str(num))
+
+step6 = step5.filter(lambda x: x[1] >= 2)
+output = step6.collect()
 for pair, num in output:
     print("(" + str(pair) + " : " + str(num))
 
