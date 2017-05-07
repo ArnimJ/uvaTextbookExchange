@@ -10,7 +10,7 @@ sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
 data = sc.textFile("/app/pageView.txt", 2)     # each worker loads a piece of the data file
 
-pairs = data.map(lambda line: line.split("\t"))   # tell each worker to split each line of it's partition
+pairs = data.map(lambda line: tuple(line.split("\t")))   # tell each worker to split each line of it's partition
 pairs = pairs.distinct()
 
 #group username to post ids (arnim, <1,2,3>)
@@ -23,7 +23,8 @@ usertotuple = viewsperuser.flatMap(lambda p: [(p[0], tups) for tups in combs(p[1
 output = usertotuple.collect()
 
 for user, pair in output:
-    print("("+user+": "+str(pair)+")")
+    for i in pair:
+        print("("+user+": "+str(pair)+")")
 
 print("----------------done---------------")
 
@@ -34,7 +35,7 @@ viewtouser = swap.groupByKey()
 output = viewtouser.collect()
 
 for pair, user in output:
-    print("(" + str(pair) + " : " + str(user))
+    print("(" + str(pair) + " : " + repr(user))
 
 print("----------------done---------------")
 
