@@ -34,10 +34,10 @@ class Authenticator(models.Model):
     authenticator = models.TextField(blank=False, null=False)
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True, null=True)
 
-class recommendations(models.Model):
-    post_id = models.IntegerField(primary_key=True)
-    recommended_items = models.CharField(max_length=100)
 
+class Recommendation(models.Model):
+    listing = models.ForeignKey(TextbookPost)
+    recs = models.CharField(max_length=50)
 
 
 # #each post will have one catagory.

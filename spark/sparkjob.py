@@ -64,8 +64,8 @@ cursor = db.cursor()
 cursor.execute("Truncate recommendations") #delete contents of table
 
 dict = {}
-for pair, num in output:
-    if dict
+# for pair, num in output:
+#     if dict
 
 
 
