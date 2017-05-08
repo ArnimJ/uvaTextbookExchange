@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^v1/api/authenticate/', views.authenticateUser),
     url(r'^v1/api/search_listing/', views.search_listing),
     url(r'^v1/api/addtolog/', views.addtolog),
+    url(r'^v1/api/listing_detail/', views.listing_detail),
 ]
 
