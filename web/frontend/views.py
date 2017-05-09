@@ -152,7 +152,7 @@ def buying(request):
             text = " "
             return render(request, 'buy.html', {'form': form, 'text': text, 'posted': False})
         else:
-            form = SellingForm(request.POST)
+            form = BuyingForm(request.POST)
             if form.is_valid():
                 resp = requests.post('http://exp-api:8000/v1/api/createBuyPost/', form.cleaned_data)
                 text = resp.json()["results"]
