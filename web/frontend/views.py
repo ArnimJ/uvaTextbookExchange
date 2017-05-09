@@ -11,6 +11,7 @@ from elasticsearch import Elasticsearch
 from .forms import *
 # from models.marketplace.models import Authenticator
 
+EXP = 'http://exp-api:8000/v1/api/'
 
 # Create your views here.
 exp_endpoint = "http://exp-api:8000/v1/api/"
@@ -180,21 +181,15 @@ def listing_detail(request, id):
         return HttpResponseRedirect('/login/')
     else:
         user = auth_check['resp']
-        resp = requests.get('http://exp-api:8000/v1/api/allListing/')
-        posts = resp.json()['results']
-        num = int(id) - 1
-        b = posts[num]
-
-        textbook_id = b['textbook_id']
-        resp2 = requests.get('http://exp-api:8000/v1/api/textbooks/')
-        textobj = resp2.json()['results']
-        num2 = int(textbook_id) - 1
-        book = textobj[num2]
+        resp = requests.post(EXP + 'listing_detail/', {'id':id}).json()
+        listing = resp['listing']
+        book = resp['book']
+        recommendations = resp['recommendations'] #None if there are no recs for this post
 
         #send page view to exp to be added to log file
         resp3 = requests.post('http://exp-api:8000/v1/api/addtolog/', {'username': user['username'], 'item_id': id})
 
-        return render(request, 'listing_detail.html', {'listing': b, 'id': id, 'textbook': book, 'user': user})
+        return render(request, 'listing_detail.html', {'listing': listing, 'id': id, 'textbook': book, 'recommendations': recommendations, 'user': user})
 
 def search_listing(request):
     if request.method == 'POST':

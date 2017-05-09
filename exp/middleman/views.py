@@ -90,3 +90,19 @@ def addtolog(request):
     addView = {'username': username, 'item_id':id}
     producer.send('new-page-view', json.dumps(addView).encode('utf-8'))
     return JsonResponse({'results': 'item view added to kafka'})
+
+def listing_detail(request):
+    if request.method == 'POST':
+        resp = requests.get(MODELS + 'textbooklistings/?id='+request.POST.get('id')).json()
+        post = resp['results']
+
+        textbook_id = post['textbook']
+        resp2 = requests.get(MODELS + 'textbooks/?id=' + str(int(textbook_id))).json()
+        textobj = resp2['results']
+
+        recs = requests.get(MODELS + 'recommendations/?id=' + request.POST.get('id')).json()
+        if recs['ok']:
+            recposts = recs['resp']
+        else: recposts = None
+
+        return JsonResponse({'listing': post, 'book': textobj, 'recommendations': recposts})

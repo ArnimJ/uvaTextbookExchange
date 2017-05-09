@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Textbook, TextbookPost, User, Authenticator
+from .models import Textbook, TextbookPost, User, Authenticator, Recommendation
 from django.views.generic import TemplateView
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
@@ -492,7 +492,20 @@ def createSellPost(request):
     else:
         return JsonResponse({'results': "This is a POST method"})
 
+def recommendations(request):
+    if request.method == 'GET':
+        id = request.GET.get('id') #listing id
+        try:
+            recs = Recommendation.objects.get(listing=int(id))
+            recs = recs.recs #kinda funny but gets recommendation string for listing
+            recs = recs[:-1] #strip trailing comma
+            recs = recs.split(',')
+            posts = list(TextbookPost.objects.filter(id__in=recs)[:4].values()) #gets at maximum 4 recommended posts
+        except Recommendation.DoesNotExist:
+            return _error_response(request, "No recommendations for this post")
 
+        if posts:
+            return _success_response(request, posts)
 
 
 

@@ -41,5 +41,41 @@
 
 
     </div>
+    <div class="container">
+    </br></br>
+        {% if recommendations %}
+        <h3>Users who looked at this post also looked at these posts</h3>
+        <table id="post_table" class="table table-striped tablesorter">
+            <thead>
+                <tr>
+                    <th>Post Title </th>
+                    <th>Condition</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Sold</th>
+                    <th>Times Viewed</th>
+                    <th>Post Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in recommendations %}
+                            <tr>
+                                <td><a href="{% url 'listing_detail' post.id %}">{{ post.postTitle }}</a></td>
+                                <td>{{ post.condition }}</td>
+                                <td>{{ post.price }}</td>
+                                <td>{{ post.category }}</td>
+                                <td>{{ post.sold }}
+                                <td>{{ post.viewCount }}</td>
+                                <td>{{ post.postDate }}</td>
+                            </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br/>
+
+        {% else %}
+        <h3> There are no recommended posts for this listing</h3>
+        {% endif %}
+    </div>
 
 {% endblock %}

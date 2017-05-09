@@ -3,7 +3,7 @@ import logging
 import json
 from pathlib import Path
 
-while(True):
+while True:
     try:
         consumer = KafkaConsumer('new-page-view', group_id='view-indexer', bootstrap_servers=['kafka:9092'])
         break
@@ -15,8 +15,8 @@ for message in consumer:
     print(json.loads((message.value).decode('utf-8')))
 
     #append username item_id to end of log file here
-    f = open("pageView.txt", "a+")
-    f.write(view['username'] + " " + view['item_id'])
+    f = open("spark/pageView.txt", "a+")
+    f.write(view['username'] + "\t" + view['item_id'] + "\n")
     f.close()
 
     # my_file = Path("/uvaTextbookExchange/pageView.txt")

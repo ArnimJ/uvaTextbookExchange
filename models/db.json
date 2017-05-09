@@ -3,7 +3,6 @@
     "model": "marketplace.textbook",
     "pk": 1,
     "fields": {
-      "id" : 1,
       "title": "Probability and Stochastic Processes",
       "isbn": 9781118324561,
       "author": "Roy D. Yates",
@@ -15,7 +14,6 @@
     "model": "marketplace.textbook",
     "pk": 2,
     "fields": {
-      "id" : 2,
       "title": "Interaction Design",
       "isbn": 9781119020752,
       "author": "Rogers Price",
@@ -27,7 +25,6 @@
     "model": "marketplace.textbook",
     "pk": 3,
     "fields": {
-      "id" : 3,
       "title": "Microeconomics",
       "isbn":  9780077501808,
       "author": "Colander",
@@ -37,9 +34,8 @@
   },
   {
     "model": "marketplace.TextbookPost",
-    "pk": 4,
+    "pk": 1,
     "fields": {
-      "id" : 1,
       "postTitle": "Probability Textbook For sale",
       "textbook": 1,
       "condition" : "Used",
@@ -52,9 +48,8 @@
   },
     {
     "model": "marketplace.TextbookPost",
-    "pk": 5,
+      "pk": 2,
     "fields": {
-      "id" : 2,
       "postTitle": "Interaction Design For Sale",
       "textbook": 2,
       "condition" : "Used",
@@ -67,9 +62,8 @@
   },
     {
     "model": "marketplace.TextbookPost",
-    "pk": 6,
+    "pk": 3,
     "fields": {
-      "id" : 3,
       "postTitle": "Microeconomics",
       "textbook": 3,
       "condition" : "Used",
@@ -82,9 +76,8 @@
   },
       {
     "model": "marketplace.TextbookPost",
-    "pk": 7,
+    "pk": 4,
     "fields": {
-      "id" : 4,
       "postTitle": "Macroeconomics",
       "textbook": 3,
       "condition" : "Used",
@@ -97,9 +90,8 @@
   },
       {
     "model": "marketplace.TextbookPost",
-    "pk": 8,
+    "pk": 5,
     "fields": {
-      "id" : 5,
       "postTitle": "Microeconomics",
       "textbook": 3,
       "condition" : "Used",

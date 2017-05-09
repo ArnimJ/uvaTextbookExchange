@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^v1/api/createSellPost/', views.createSellPost, name="createSell"),  # create a new sell post
     url(r'^v1/api/popularListings/', views.getPopularPosts, name="getPopularPosts"), #popular textbook posts
     url(r'^v1/api/recentListings/', views.getRecentPosts, name="getRecentPosts"), #recent posts
+    url(r'^v1/api/recommendations/', views.recommendations, name="recommendations"), #post recommendations
 
     url(r'^v1/api/createUser/', views.createUser, name="createUser"),
     url(r'^v1/api/user/', views.getUser, name="getUser"),
