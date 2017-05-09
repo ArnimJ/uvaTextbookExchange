@@ -36,7 +36,7 @@ class Authenticator(models.Model):
 
 
 class Recommendation(models.Model):
-    listing = models.ForeignKey(TextbookPost)
+    listing = models.IntegerField(primary_key=True)
     recs = models.CharField(max_length=50)
 
 

@@ -3,7 +3,7 @@ import logging
 import json
 from pathlib import Path
 
-while(True):
+while True:
     try:
         consumer = KafkaConsumer('new-page-view', group_id='view-indexer', bootstrap_servers=['kafka:9092'])
         break

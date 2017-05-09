@@ -1,6 +1,7 @@
 from pyspark import SparkContext
 import itertools
 import MySQLdb
+import time
 
 #return a list of combinations
 def combs(a):
@@ -9,9 +10,8 @@ def combs(a):
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
+#while True:
 data = sc.textFile("/app/pageView.txt", 2)     # each worker loads a piece of the data file
-
-
 pairs = data.map(lambda line: tuple(line.split("\t")))   # tell each worker to split each line of it's partition
 pairs = pairs.distinct()
 
@@ -56,19 +56,37 @@ output = step6.collect()
 for pair, num in output:
     print("(" + str(pair) + " : " + str(num))
 
+print("------------------")
 
 #--------Database stuff--------------------------------------
 
 db = MySQLdb.connect("db","www","$3cureUS","cs4501")
 cursor = db.cursor()
-cursor.execute("Truncate recommendations") #delete contents of table
+cursor.execute("Truncate marketplace_recommendation") #delete contents of table
 
-dict = {}
-# for pair, num in output:
-#     if dict
+for pair, num in output:
+    id = int(pair[0])
+    rec = str(pair[1]) + ","
+    sql = "INSERT INTO marketplace_recommendation (listing, recs) VALUES ('%d', '%s') ON DUPLICATE KEY UPDATE recs=CONCAT(recs,'%s')" % (id , rec, rec)
+    print (sql)
+    try:
+        cursor.execute(sql)
+        db.commit()
+    except:
+        db.rollback()
 
+    id1 = int(pair[1])
+    rec1 = str(pair[0]) + ","
 
+    sql2 = "INSERT INTO marketplace_recommendation (listing, recs) VALUES ('%d', '%s') ON DUPLICATE KEY UPDATE recs=CONCAT(recs,'%s')" % (id1, rec1, rec1)
+    # print(sql)
+    try:
+        cursor.execute(sql2)
+        db.commit()
+    except:
+        db.rollback()
 
 db.close()
+        #time.sleep(180)
 
 sc.stop()
