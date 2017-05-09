@@ -496,11 +496,12 @@ def recommendations(request):
     if request.method == 'GET':
         id = request.GET.get('id') #listing id
         try:
-            recs = Recommendation.objects.get(listing=id)
-            recs = recs.recs #kinda funny but gets recommendation string for
+            recs = Recommendation.objects.get(listing=int(id))
+            recs = recs.recs #kinda funny but gets recommendation string for listing
+            recs = recs[:-1] #strip trailing comma
             recs = recs.split(',')
-            posts = TextbookPost.objects.filter(id__in=recs)[:4] #gets at maximum 4 recommended posts
-        except:
+            posts = list(TextbookPost.objects.filter(id__in=recs)[:4].values()) #gets at maximum 4 recommended posts
+        except Recommendation.DoesNotExist:
             return _error_response(request, "No recommendations for this post")
 
         if posts:

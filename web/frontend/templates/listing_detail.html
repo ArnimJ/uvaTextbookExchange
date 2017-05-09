@@ -49,7 +49,6 @@
             <thead>
                 <tr>
                     <th>Post Title </th>
-                    <th>Textbook</th>
                     <th>Condition</th>
                     <th>Price</th>
                     <th>Category</th>
@@ -60,11 +59,8 @@
             </thead>
             <tbody>
                 {% for post in recommendations %}
-                    {% for book in book_list %}
-                        {% if post.textbook_id == book.id %}
                             <tr>
-                                <td>{{ post.postTitle }}</td>
-                                <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
+                                <td><a href="{% url 'listing_detail' post.id %}">{{ post.postTitle }}</a></td>
                                 <td>{{ post.condition }}</td>
                                 <td>{{ post.price }}</td>
                                 <td>{{ post.category }}</td>
@@ -72,45 +68,11 @@
                                 <td>{{ post.viewCount }}</td>
                                 <td>{{ post.postDate }}</td>
                             </tr>
-                        {% endif %}
-                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
         <br/>
-        <h1> Recent Posts </h1>
-            <table id="recent_table" class="table table-striped tablesorter">
-            <thead>
-                <tr>
-                    <th>Post Title</th>
-                    <th>Textbook</th>
-                    <th>Condition</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Sold</th>
-                    <th>Times Viewed</th>
-                    <th>Post Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for post in recentposts %}
-                    {% for book in book_list %}
-                        {% if post.textbook_id == book.id %}
-                            <tr>
-                                <td>{{ post.postTitle }}</td>
-                                <td><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></td>
-                                <td>{{ post.condition }}</td>
-                                <td>{{ post.price }}</td>
-                                <td>{{ post.category }}</td>
-                                <td>{{ post.sold }}
-                                <td>{{ post.viewCount }}</td>
-                                <td>{{ post.postDate }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
+
         {% else %}
         <h3> There are no recommended posts for this listing</h3>
         {% endif %}

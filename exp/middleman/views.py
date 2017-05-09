@@ -102,7 +102,7 @@ def listing_detail(request):
 
         recs = requests.get(MODELS + 'recommendations/?id=' + request.POST.get('id')).json()
         if recs['ok']:
-            recposts = recs['resp']['posts']
+            recposts = recs['resp']
         else: recposts = None
 
         return JsonResponse({'listing': post, 'book': textobj, 'recommendations': recposts})

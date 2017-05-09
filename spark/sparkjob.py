@@ -51,7 +51,7 @@ for pair, num in output:
 
 #step 6
 
-step6 = step5.filter(lambda x: x[1] >= 2)
+step6 = step5.filter(lambda x: x[1] > 2) #filter out all pairs with less than 3 separate users exhibiting that co-click
 output = step6.collect()
 for pair, num in output:
     print("(" + str(pair) + " : " + str(num))
@@ -73,6 +73,7 @@ for pair, num in output:
         cursor.execute(sql)
         db.commit()
     except:
+        print("eeeeeeeeeror")
         db.rollback()
 
     id1 = int(pair[1])
