@@ -13,7 +13,8 @@
 - Travis CI output is included in our email to you
 - The Digital ocean hosted application can be viewed at : http://107.170.22.151:8000/ (this only has the code for project 6 not 7)
 - Selenium Instructions:
-  - Selenium runs seperately from docker and is actually carried out locally
+  - Our Selenium tests run completley separate from docker, they run locally on our models django application
   - Steps to run Selenium:
-    - pip install -U selenium
-    - 
+    - pip install selenium
+    - Enter models project: `cd models`
+    - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of the test from the set of tests under the MySelenium Tests class
