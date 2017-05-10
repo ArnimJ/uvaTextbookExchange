@@ -17,4 +17,4 @@
   - Steps to run Selenium:
     - pip install selenium
     - Enter models project: `cd models`
-    - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of the test from the set of tests under the MySelenium Tests class
+    - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of a test from the set of tests under the MySelenium Tests class
