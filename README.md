@@ -15,6 +15,6 @@
 - Selenium Instructions:
   - Our Selenium tests run completley separate from docker, they run locally on our models django application
   - Steps to run Selenium:
-    - pip install selenium
+    - Install Selenium:`pip install selenium`
     - Enter models project: `cd models`
     - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of a test from the set of tests under the MySelenium Tests class
