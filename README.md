@@ -12,3 +12,8 @@
 - For this project, we completed the three required tasks: selenium, travis ci, and load blancing and in addition hosted our applications to Digital Ocean
 - Travis CI output is included in our email to you
 - The Digital ocean hosted application can be viewed at : http://107.170.22.151:8000/ (this only has the code for project 6 not 7)
+- Selenium Instructions:
+  - Selenium runs seperately from docker and is actually carried out locally
+  - Steps to run Selenium:
+    - pip install -U selenium
+    - 
