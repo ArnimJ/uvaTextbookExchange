@@ -129,7 +129,7 @@ web1:
       - "8003:8000"
    volumes:
       - ./web:/app
-   command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
+   command: bash -c "pip install requests django-externaltestserver && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
 
 web2:
    container_name: web2
@@ -140,5 +140,5 @@ web2:
       - "8004:8000"
    volumes:
       - ./web:/app
-   command: bash -c "pip install requests && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
+   command: bash -c "pip install requests django-externaltestserver && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
 
