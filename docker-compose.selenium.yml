@@ -1,0 +1,172 @@
+spark-master:
+  image: gettyimages/spark
+  command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
+  container_name: spark-master
+  hostname: spark-master
+  environment:
+    MASTER: spark://spark-master:7077
+    SPARK_CONF_DIR: /conf
+  external_links:
+      -  mysql:db
+  expose:
+    - 7001
+    - 7002
+    - 7003
+    - 7004
+    - 7005
+    - 7006
+    - 7077
+    - 6066
+  ports:
+    - 4040:4040
+    - 6066:6066
+    - 7077:7077
+    - 8080:8080
+  volumes:
+    - ./spark:/app
+
+sparkWorker:
+  image: gettyimages/spark
+  command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+  container_name: spark-worker
+  hostname: spark-worker
+  environment:
+    SPARK_CONF_DIR: /conf
+    SPARK_WORKER_CORES: 2
+    SPARK_WORKER_MEMORY: 512m
+    SPARK_WORKER_PORT: 8881
+    SPARK_WORKER_WEBUI_PORT: 8081
+  links:
+    - spark-master
+  expose:
+    - 7012
+    - 7013
+    - 7014
+    - 7015
+    - 7016
+    - 8881
+  ports:
+    - 8081:8081
+  volumes:
+    - ./spark:/app
+
+haproxy:
+    build: ./haproxy
+    container_name: haproxy
+    volumes:
+       - ./haproxy:/app
+    ports:
+       - "8000:8000"
+    links:
+       - web1:web1
+       - web2:web2
+
+kafka:
+   image: spotify/kafka
+   container_name: kafka
+   environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+   hostname: kafka
+
+es:
+   image: elasticsearch:2.0
+   container_name: es
+   ports:
+      - "9200:9200"
+
+batch:
+   image: tp33/django
+   container_name: batch
+   volumes:
+        - .:/app
+   links:
+      - kafka:kafka
+      - es:es
+   command: bash -c "python batch.py"
+
+viewtracker:
+   image: tp33/django
+   container_name: viewtracker
+   volumes:
+        - .:/app
+   links:
+      - kafka:kafka
+   command: bash -c "python appendToLog.py"
+
+models:
+    container_name: models
+    image: tp33/django
+    external_links:
+      -  mysql:db
+    volumes:
+      - ./models:/app
+    ports:
+      - "8001:8000"
+    command: bash -c "python manage.py makemigrations marketplace && python manage.py migrate && python manage.py loaddata db.json && python manage.py test marketplace &&
+        mod_wsgi-express start-server --working-directory . --reload-on-changes ./models/wsgi.py"
+
+
+exp:
+   container_name: exp
+   image: tp33/django
+   links:
+      - models:models-api
+      - kafka:kafka
+      - es:es
+   ports:
+      - "8002:8000"
+   volumes:
+      - ./exp:/app
+   command: bash -c "pip install requests && python setup.py && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./exp/wsgi.py"
+
+web1:
+   container_name: web1
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8003:8000"
+   volumes:
+      - ./web:/app
+   environment:
+      EXTERNAL_TEST_SERVER: http://livetestserver:8000
+      SELENIUM_HOST: http://selenium:4444/wd/hub
+   links:
+      - selenium
+   command: bash -c "pip install requests selenium django-externaltestserver django-nose && python manage.py test frontend && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
+
+web2:
+   container_name: web2
+   image: tp33/django
+   links:
+      - exp:exp-api
+   environment:
+      EXTERNAL_TEST_SERVER: http://livetestserver:8000
+      SELENIUM_HOST: http://selenium:4444/wd/hub
+   ports:
+      - "8004:8000"
+   volumes:
+      - ./web:/app
+   links:
+      - selenium
+   command: bash -c "pip install requests selenium django-externaltestserver && python manage.py test frontend && mod_wsgi-express start-server --log-to-terminal --working-directory . --reload-on-changes ./web/wsgi.py"
+
+selenium:
+    container_name: selenium
+    image: selenium/standalone-chrome:2.48.2
+    links:
+       - livetestserver
+
+livetestserver:
+    container_name: livetestserver
+    image: tp33/django
+    environment:
+       - PYTHONUNBUFFERED=1
+    links:
+       - exp:exp-api
+    volumes:
+       - ./web:/app
+    command: bash -c "pip install requests selenium django-externaltestserver && python manage.py livetestserver 8000 --static"
+    expose:
+       - "8000"

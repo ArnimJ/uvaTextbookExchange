@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'frontend',
+    'externaltestserver',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,4 +114,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #   os.path.join(BASE_DIR, 'static'),
 #]
 
-
+EXTERNAL_TEST_SERVER = os.environ.get('EXTERNAL_TEST_SERVER', None)
