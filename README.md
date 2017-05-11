@@ -19,6 +19,6 @@
     - Enter models project: `cd models`
     - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of a test from the set of tests under the MySelenium Tests class
 
-Haproxy load-balancing
-There is a haproxy docker container specified partially in the docker-compose file, but built from specifications in haproxy/Dockerfile as according to the config found at haproxy/haproxy.cfg. 
-It is facing port 8000, and directs incoming requests in a roundrobin fashion to either the web1 or web2 containers, now at ports 8003 and 8004 respectively. Evidence of this happening can be found in the haproxy screenshot in the screenshots folder, notice how at the bottom we repeated an action for which we have the server print out the response object, and the request was taken care of first by web2 and then by web1. (That action is logging in in case you want to test that out yourself.)
+-Haproxy load-balancing
+  There is a haproxy docker container specified partially in the docker-compose file, but built from specifications in haproxy/Dockerfile as according to the config found at haproxy/haproxy.cfg. 
+  It is facing port 8000, and directs incoming requests in a roundrobin fashion to either the web1 or web2 containers, now at ports 8003 and 8004 respectively. Evidence of this happening can be found in the haproxy screenshot in the screenshots folder, notice how at the bottom we repeated an action for which we have the server print out the response object, and the request was taken care of first by web2 and then by web1. (That action is logging in in case you want to test that out yourself.)
