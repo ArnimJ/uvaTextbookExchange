@@ -17,7 +17,7 @@
   - Integration Testing with Selenium
     - We have two verions of our docker-compose file: docker-compose.yml and docker-compose.selenium.yml
     - In order to run a test, copy the contents of docker-compose.selenium.yml and replace the contents of the docker-compose.yml with that code 
-    - To run a test simply run the command docker-compose run web1
+    - To run a test simply run the command docker-compose run web1 (only creates containers necessary to allow web1 container to run the tests)
     - Inside web/frontend/tests.py you can only run a single test method that begins "test_load" because they would conflict with eachother if run at the same time
     - Therefore uncomment only one "test_load" test per run of docker-compose run web1, otherwise tests will unecessarily fail
 
