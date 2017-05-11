@@ -14,10 +14,12 @@
 - The Digital ocean hosted application can be viewed at : http://107.170.22.151:8000/ (this only has the code for project 6 not 7)
 - Selenium Instructions:
   - Our Selenium tests run completley separate from docker, they run locally on our models django application
-  - Steps to run Selenium:
-    - Install Selenium:`pip install selenium`
-    - Enter models project: `cd models`
-    - Run test: `python manage.py test marketplace.tests.MySeleniumTests.test_name_here` where test_name_here is the name of a test from the set of tests under the MySelenium Tests class
+  - Integration Testing with Selenium
+    - We have two verions of our docker-compose file: docker-compose.yml and docker-compose.selenium.yml
+    - In order to run a test, copy the contents of docker-compose.selenium.yml and replace the contents of the docker-compose.yml with that code 
+    - To run a test simply run the command docker-compose run web1
+    - Inside web/frontend/tests.py you can only run a single test method that begins "test_load" because they would conflict with eachother if run at the same time
+    - Therefore uncomment only one "test_load" test per run of docker-compose run web1, otherwise tests will unecessarily fail
 
 -Haproxy load-balancing
   There is a haproxy docker container specified partially in the docker-compose file, but built from specifications in haproxy/Dockerfile as according to the config found at haproxy/haproxy.cfg. 
