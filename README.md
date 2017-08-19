@@ -1,5 +1,19 @@
 # uvaTextbookExchange
 
+##General Description:
+- Uva Textbook Exchange is an online applicaiton built using Django Framework
+- It is a website that allows UVA students to both buy and sell thier textbooks (online marketplace)
+- The highlights of this project is that it is completely built with the purpose to scale
+- The application is based on a Microservices architecture and utilizes docker 
+- Technologies used:
+  - Django Framework
+  - Docker
+  - Continuous Integration (Selenium and Travis CI)
+  - Haproxy for load-balancing
+  - Spark (reccomendation engine for users)
+  - Kafka
+  - Elasticsearch
+
 ## Project 7
 - Project 7 should work as expected. 
 - After you run docker-compose up, please go to the website and view some of the listings using multiple accounts
